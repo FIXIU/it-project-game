@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://crjqck2mv2nbi"]
+
+[ext_resource type="Script" uid="uid://daybyqt1bpdaw" path="res://scripts/MainMenu.cs" id="1_yqorp"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yqorp")
+
+[node name="LoadGameButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 9.0
+offset_right = 131.0
+offset_bottom = 40.0
+text = "Load Game"
+
+[connection signal="pressed" from="LoadGameButton" to="." method="OnLoadGameButtonPressed"]

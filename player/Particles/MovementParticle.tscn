@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://845n1k15ncn8"]
+
+[ext_resource type="Script" uid="uid://c54i7pb76tpgo" path="res://player/Particles/MovementParticles.cs" id="1_i5v5a"]
+
+[node name="Node2D" type="Node2D" node_paths=PackedStringArray("MyParticles")]
+script = ExtResource("1_i5v5a")
+MyParticles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
