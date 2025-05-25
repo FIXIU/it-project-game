@@ -3,281 +3,304 @@ using System;
 
 public partial class PlayerMovement : CharacterBody2D
 {
-	public const float Speed = 220.0f;
-	public const float JumpVelocity = -400.0f;
-	
-	// Variable jump
-	private float jumpCutMultiplier = 0.4f; // Button release jump cutoff
-	private bool isJumping = false;
-	private float minJumpVelocity = -150.0f; // Minimum jump height
-	
-	// Wall jump boost
-	private float wallJumpBoostTime = 0.3f;
-	private float currentWallJumpTime = 0f;
-	private float wallJumpForce = 0f;
-	private int wallJumpDirection = 0;
+    // Movement constants
+    public const float Speed = 220.0f;
+    public const float JumpVelocity = -400.0f;
+    
+    // Variable jump parameters
+    [Export] private float jumpCutMultiplier = 0.4f;
+    [Export] private float minJumpVelocity = -150.0f;
+    
+    // Wall jump parameters
+    [Export] private float wallJumpBoostTime = 0.3f;
+    [Export] private float wallJumpSpeedMultiplier = 1.5f;
+    [Export] private float wallJumpPlayerInfluence = 0.2f; // How much player can control during wall jump
+    
+    // Coyote time parameters
+    [Export] private float coyoteTimeMax = 0.15f;
+    [Export] private float wallCoyoteTimeMax = 0.1f;
+    
+    // State tracking
+    private bool isJumping = false;
+    private bool wasOnFloor = false;
+    private bool wasOnWall = false;
+    
+    // Timers
+    private float currentWallJumpTime = 0f;
+    private float coyoteTimeLeft = 0f;
+    private float wallCoyoteTimeLeft = 0f;
+    
+    // Wall jump data
+    private float wallJumpForce = 0f;
+    private int wallJumpDirection = 0;
+    private Vector2 lastWallNormal = Vector2.Zero;
+    
+    // Cached references
+    [Export] public StateMachine stateMachine;
+    [Export] public Node2D VisualsNode { get; set; }
+    [Export] public Node2D CollisionNode { get; set; }
+    
+    // Cached input values to avoid multiple calls
+    private Vector2 inputDirection;
+    private bool jumpPressed;
+    private bool jumpReleased;
+    
+    // Physics state cache
+    private bool onFloor;
+    private bool onWall;
+    private Vector2 gravity;
 
-	// Coyote time
-	private float coyoteTimeMax = 0.15f;
-	private float coyoteTimeLeft = 0f;
-	private bool wasOnFloor = false;
-	
-	// Wall coyote time parameters
-	private float wallCoyoteTimeMax = 0.1f; // 100ms of wall coyote time
-	private float wallCoyoteTimeLeft = 0f;
-	private bool wasOnWall = false;
-	private Vector2 lastWallNormal = Vector2.Zero;
-
-	[Export] public StateMachine stateMachine;
-	[Export] public Node2D VisualsNode { get; set; }
-	[Export] public Node2D CollisionNode { get; set; }
-
-	public override void _PhysicsProcess(double delta)
-	{
-		Vector2 velocity = Velocity;
-		float deltaFloat = (float)delta;
-		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-
-		// Update wall jump timer
-		if (currentWallJumpTime > 0)
-		{
-			currentWallJumpTime -= deltaFloat;
-			if (currentWallJumpTime <= 0)
-			{
-				// Reset when timer ends
-				currentWallJumpTime = 0;
-				wallJumpForce = 0;
-				wallJumpDirection = 0;
-			}
-		}
-
-		// Update floor coyote time
-		if (IsOnFloor())
-		{
-			// Reset coyote time when on floor
-			coyoteTimeLeft = coyoteTimeMax;
-			wasOnFloor = true;
-			isJumping = false; // Reset jumping state when landing
-		}
-		else if (wasOnFloor) 
-		{
-			// Started falling, begin coyote time countdown
-			wasOnFloor = false;
-		}
-		else if (coyoteTimeLeft > 0)
-		{
-			// In the air and coyote time is active
-			coyoteTimeLeft -= deltaFloat;
-		}
-		
-		// Update wall coyote time
-		if (IsOnWall() && !IsOnFloor())
-		{
-			// Reset wall coyote time when on wall
-			wallCoyoteTimeLeft = wallCoyoteTimeMax;
-			lastWallNormal = GetWallNormal().Normalized();
-			wasOnWall = true;
-		}
-		else if (wasOnWall)
-		{
-			// Just left the wall, begin wall coyote time countdown
-			wasOnWall = false;
-		}
-		else if (wallCoyoteTimeLeft > 0)
-		{
-			// In the air and wall coyote time is active
-			wallCoyoteTimeLeft -= deltaFloat;
-		}
-
-		// Add the gravity.
-		if (!IsOnFloor() && !IsOnWall())
-		{
-			velocity += GetGravity() * deltaFloat;
-		}
-		
-		// Handle wall mechanics
-
-		// 		Wall slide
-		if (IsOnWall() && !IsOnFloor())
-		{
-			velocity += GetGravity()/2 * deltaFloat;
-			stateMachine.TransitionTo("WallSlide"); // Transition to WallSlide state
-			if (VisualsNode != null) // Ensure VisualsNode is assigned in the editor
-			{
-				if (direction.X != 0) // Only flip if there's horizontal input
-				{
-					float newScaleX = Mathf.Abs(VisualsNode.Scale.X);
-					// If scale was somehow 0, default to 1 to avoid issues.
-					if (newScaleX == 0) newScaleX = 1.0f;
-
-					if (direction.X < 0)
-					{
-						VisualsNode.Scale = new Vector2(-newScaleX, VisualsNode.Scale.Y);
-					}
-					else // direction.X > 0
-					{
-						VisualsNode.Scale = new Vector2(newScaleX, VisualsNode.Scale.Y);
-					}
-				}
-			}
-			
-			if (CollisionNode != null) // Ensure VisualsNode is assigned in the editor
-			{
-				if (direction.X != 0) // Only flip if there's horizontal input
-				{
-					float newPosX = Mathf.Abs(CollisionNode.Position.X);
-					// If scale was somehow 0, default to 1 to avoid issues.
-					if (newPosX == 0) newPosX = 1.0f;
-
-					if (direction.X < 0)
-					{
-						CollisionNode.Position = new Vector2(newPosX, CollisionNode.Position.Y);
-					}
-					else // direction.X > 0
-					{
-						CollisionNode.Position = new Vector2(-newPosX, CollisionNode.Position.Y);
-					}
-				}
-			}
-		}
-
-		// 		Wall jump (with wall coyote time)
-		bool canWallJump = (IsOnWall() || wallCoyoteTimeLeft > 0) && !IsOnFloor();
-		if (canWallJump && Input.IsActionJustPressed("ui_accept"))
-		{
-			GD.Print("Attempting Wall Jump"); // DEBUG
-			// Get wall normal - either current or from coyote time
-			Vector2 wallNormal = IsOnWall() ? GetWallNormal().Normalized() : lastWallNormal;
-			
-			// Set vertical jump velocity immediately
-			velocity.Y = JumpVelocity;
-			isJumping = true;
-			
-			// Store wall jump parameters for horizontal movement
-			wallJumpDirection = (int)Mathf.Sign(wallNormal.X);
-			wallJumpForce = Speed * 1.5f;
-			currentWallJumpTime = wallJumpBoostTime;
-			
-			// Consume wall coyote time
-			wallCoyoteTimeLeft = 0;
-			
-			GD.Print($"Wall Jump: Direction = {wallJumpDirection}, Force = {wallJumpForce}");
-			if (stateMachine != null)
-			{
-				GD.Print("Transitioning to Jump state from Wall Jump"); // DEBUG
-				stateMachine.TransitionTo("Jump"); // Or a specific WallJump state
-			}
-			else
-			{
-				GD.Print("StateMachine is null in Wall Jump"); // DEBUG
-			}
-		}
-
-		// Handle Jump (with coyote time)
-		bool canJump = IsOnFloor() || coyoteTimeLeft > 0;
-		if (Input.IsActionJustPressed("ui_accept") && canJump && !canWallJump) // Ensure not wall jumping
-		{
-			GD.Print("Attempting Regular Jump"); // DEBUG
-			velocity.Y = JumpVelocity;
-			coyoteTimeLeft = 0; // Used the coyote time
-			isJumping = true;
-			if (stateMachine != null)
-			{
-				GD.Print("Transitioning to Jump state from Regular Jump"); // DEBUG
-				stateMachine.TransitionTo("Jump");
-			}
-			else
-			{
-				GD.Print("StateMachine is null in Regular Jump"); // DEBUG
-			}
-		}
-		
-		// Variable jump height - cut jump short when button is released
-		if (isJumping && Input.IsActionJustReleased("ui_accept") && velocity.Y < minJumpVelocity)
-		{
-			velocity.Y *= jumpCutMultiplier; // Cut the jump short
-		}
-
-		// Handle visual flipping based on input direction
-		if (VisualsNode != null) // Ensure VisualsNode is assigned in the editor
-		{
-			if (direction.X != 0) // Only flip if there's horizontal input
-			{
-				float newScaleX = Mathf.Abs(VisualsNode.Scale.X);
-				// If scale was somehow 0, default to 1 to avoid issues.
-				if (newScaleX == 0) newScaleX = 1.0f;
-
-				if (direction.X < 0)
-				{
-					VisualsNode.Scale = new Vector2(-newScaleX, VisualsNode.Scale.Y);
-				}
-				else // direction.X > 0
-				{
-					VisualsNode.Scale = new Vector2(newScaleX, VisualsNode.Scale.Y);
-				}
-			}
-		}
-		
-		if (CollisionNode != null) // Ensure VisualsNode is assigned in the editor
-		{
-			if (direction.X != 0) // Only flip if there's horizontal input
-			{
-				float newPosX = Mathf.Abs(CollisionNode.Position.X);
-				// If scale was somehow 0, default to 1 to avoid issues.
-				if (newPosX == 0) newPosX = 1.0f;
-
-				if (direction.X < 0)
-				{
-					CollisionNode.Position = new Vector2(newPosX, CollisionNode.Position.Y);
-				}
-				else // direction.X > 0
-				{
-					CollisionNode.Position = new Vector2(-newPosX, CollisionNode.Position.Y);
-				}
-			}
-		}
-		
-		// Calculate horizontal velocity with wall jump influence
-		if (currentWallJumpTime > 0)
-		{
-			// Calculate how much influence the wall jump still has (1.0 to 0.0)
-			float wallJumpInfluence = currentWallJumpTime / wallJumpBoostTime;
-			
-			// Blend wall jump force with player input
-			float playerInfluence = 1.0f - wallJumpInfluence * 0.8f; // Allow some player control even at start
-			
-			// Apply both forces
-			velocity.X = (wallJumpDirection * wallJumpForce * wallJumpInfluence) + 
-						(direction.X * Speed * playerInfluence);
-		}
-		else if (direction.X != 0)
-		{
-			velocity.X = direction.X * Speed;
-			if (IsOnFloor() && !isJumping) // Modified condition: only transition to Run if on floor AND not jumping
-			{
-				stateMachine?.TransitionTo("Run");
-			}
-		}
-		else
-		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			if (IsOnFloor() && !isJumping) // Ensure not in the middle of a jump action
-			{
-				stateMachine?.TransitionTo("Idle");
-			}
-		}
-
-		// State transitions based on vertical movement
-		if (!IsOnFloor())
-		{
-			if (velocity.Y > 0 && !IsOnWall()) // Falling and not on a wall
-			{
-				stateMachine?.TransitionTo("Fall");
-			}
-			// Jump state is handled at the point of jump action
-		}
-
-		Velocity = velocity;
-		MoveAndSlide();
-	}
+    public override void _PhysicsProcess(double delta)
+    {
+        float deltaFloat = (float)delta;
+        
+        // Cache frequently used values
+        CacheInputAndPhysicsState();
+        
+        Vector2 velocity = Velocity;
+        
+        // Update all timers in one pass
+        UpdateTimers(deltaFloat);
+        
+        // Update coyote times
+        UpdateCoyoteTime();
+        UpdateWallCoyoteTime();
+        
+        // Apply gravity
+        ApplyGravity(ref velocity, deltaFloat);
+        
+        // Handle wall mechanics
+        HandleWallSlide(ref velocity, deltaFloat);
+        
+        // Handle jumping
+        HandleJumping(ref velocity);
+        
+        // Handle horizontal movement
+        HandleHorizontalMovement(ref velocity);
+        
+        // Handle visual flipping (only once, not duplicated)
+        HandleVisualFlipping();
+        
+        // Handle state transitions
+        HandleStateTransitions(velocity);
+        
+        Velocity = velocity;
+        MoveAndSlide();
+    }
+    
+    private void CacheInputAndPhysicsState()
+    {
+        inputDirection = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+        jumpPressed = Input.IsActionJustPressed("ui_accept");
+        jumpReleased = Input.IsActionJustReleased("ui_accept");
+        
+        onFloor = IsOnFloor();
+        onWall = IsOnWall();
+        gravity = GetGravity();
+    }
+    
+    private void UpdateTimers(float delta)
+    {
+        if (currentWallJumpTime > 0)
+        {
+            currentWallJumpTime = Mathf.Max(0, currentWallJumpTime - delta);
+            if (currentWallJumpTime <= 0)
+            {
+                ResetWallJumpState();
+            }
+        }
+        
+        if (coyoteTimeLeft > 0)
+            coyoteTimeLeft = Mathf.Max(0, coyoteTimeLeft - delta);
+            
+        if (wallCoyoteTimeLeft > 0)
+            wallCoyoteTimeLeft = Mathf.Max(0, wallCoyoteTimeLeft - delta);
+    }
+    
+    private void UpdateCoyoteTime()
+    {
+        if (onFloor)
+        {
+            coyoteTimeLeft = coyoteTimeMax;
+            wasOnFloor = true;
+            isJumping = false;
+        }
+        else if (wasOnFloor)
+        {
+            wasOnFloor = false;
+        }
+    }
+    
+    private void UpdateWallCoyoteTime()
+    {
+        if (onWall && !onFloor)
+        {
+            wallCoyoteTimeLeft = wallCoyoteTimeMax;
+            lastWallNormal = GetWallNormal().Normalized();
+            wasOnWall = true;
+        }
+        else if (wasOnWall)
+        {
+            wasOnWall = false;
+        }
+    }
+    
+    private void ApplyGravity(ref Vector2 velocity, float delta)
+    {
+        if (!onFloor && !onWall)
+        {
+            velocity += gravity * delta;
+        }
+    }
+    
+    private void HandleWallSlide(ref Vector2 velocity, float delta)
+    {
+        if (onWall && !onFloor)
+        {
+            velocity += gravity * 0.5f * delta; // Reduced gravity for wall slide
+            stateMachine?.TransitionTo("WallSlide");
+            
+            // Handle wall slide visual flipping
+            if (inputDirection.X != 0)
+            {
+                FlipVisuals(inputDirection.X);
+                FlipCollision(inputDirection.X);
+            }
+        }
+    }
+    
+    private void HandleJumping(ref Vector2 velocity)
+    {
+        // Wall jump takes priority
+        if (CanWallJump() && jumpPressed)
+        {
+            PerformWallJump(ref velocity);
+        }
+        // Regular jump
+        else if (CanRegularJump() && jumpPressed)
+        {
+            PerformRegularJump(ref velocity);
+        }
+        
+        // Variable jump height
+        if (isJumping && jumpReleased && velocity.Y < minJumpVelocity)
+        {
+            velocity.Y *= jumpCutMultiplier;
+        }
+    }
+    
+    private bool CanWallJump()
+    {
+        return (onWall || wallCoyoteTimeLeft > 0) && !onFloor;
+    }
+    
+    private bool CanRegularJump()
+    {
+        return (onFloor || coyoteTimeLeft > 0) && !CanWallJump();
+    }
+    
+    private void PerformWallJump(ref Vector2 velocity)
+    {
+        Vector2 wallNormal = onWall ? GetWallNormal().Normalized() : lastWallNormal;
+        
+        velocity.Y = JumpVelocity;
+        isJumping = true;
+        
+        wallJumpDirection = (int)Mathf.Sign(wallNormal.X);
+        wallJumpForce = Speed * wallJumpSpeedMultiplier;
+        currentWallJumpTime = wallJumpBoostTime;
+        
+        wallCoyoteTimeLeft = 0;
+        
+        stateMachine?.TransitionTo("Jump");
+    }
+    
+    private void PerformRegularJump(ref Vector2 velocity)
+    {
+        velocity.Y = JumpVelocity;
+        coyoteTimeLeft = 0;
+        isJumping = true;
+        
+        stateMachine?.TransitionTo("Jump");
+    }
+    
+    private void HandleHorizontalMovement(ref Vector2 velocity)
+    {
+        if (currentWallJumpTime > 0)
+        {
+            ApplyWallJumpMovement(ref velocity);
+        }
+        else if (inputDirection.X != 0)
+        {
+            velocity.X = inputDirection.X * Speed;
+            
+            if (onFloor && !isJumping)
+            {
+                stateMachine?.TransitionTo("Run");
+            }
+        }
+        else
+        {
+            velocity.X = Mathf.MoveToward(velocity.X, 0, Speed);
+            
+            if (onFloor && !isJumping)
+            {
+                stateMachine?.TransitionTo("Idle");
+            }
+        }
+    }
+    
+    private void ApplyWallJumpMovement(ref Vector2 velocity)
+    {
+        float wallJumpInfluence = currentWallJumpTime / wallJumpBoostTime;
+        float playerInfluence = wallJumpPlayerInfluence + (1.0f - wallJumpPlayerInfluence) * (1.0f - wallJumpInfluence);
+        
+        velocity.X = (wallJumpDirection * wallJumpForce * wallJumpInfluence) + 
+                    (inputDirection.X * Speed * playerInfluence);
+    }
+    
+    private void HandleVisualFlipping()
+    {
+        if (inputDirection.X != 0)
+        {
+            FlipVisuals(inputDirection.X);
+            FlipCollision(inputDirection.X);
+        }
+    }
+    
+    private void FlipVisuals(float direction)
+    {
+        if (VisualsNode == null) return;
+        
+        float absScaleX = Mathf.Abs(VisualsNode.Scale.X);
+        if (absScaleX == 0) absScaleX = 1.0f;
+        
+        float newScaleX = direction < 0 ? -absScaleX : absScaleX;
+        VisualsNode.Scale = new Vector2(newScaleX, VisualsNode.Scale.Y);
+    }
+    
+    private void FlipCollision(float direction)
+    {
+        if (CollisionNode == null) return;
+        
+        float absPosX = Mathf.Abs(CollisionNode.Position.X);
+        if (absPosX == 0) absPosX = 1.0f;
+        
+        float newPosX = direction < 0 ? absPosX : -absPosX;
+        CollisionNode.Position = new Vector2(newPosX, CollisionNode.Position.Y);
+    }
+    
+    private void HandleStateTransitions(Vector2 velocity)
+    {
+        if (!onFloor && velocity.Y > 0 && !onWall)
+        {
+            stateMachine?.TransitionTo("Fall");
+        }
+    }
+    
+    private void ResetWallJumpState()
+    {
+        wallJumpForce = 0;
+        wallJumpDirection = 0;
+    }
 }
