@@ -3,7 +3,7 @@ using System;
 
 public partial class PlayerMovement : CharacterBody2D
 {
-	public const float Speed = 200.0f;
+	public const float Speed = 220.0f;
 	public const float JumpVelocity = -400.0f;
 	
 	// Variable jump
@@ -36,6 +36,7 @@ public partial class PlayerMovement : CharacterBody2D
 	{
 		Vector2 velocity = Velocity;
 		float deltaFloat = (float)delta;
+		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
 		// Update wall jump timer
 		if (currentWallJumpTime > 0)
@@ -100,6 +101,44 @@ public partial class PlayerMovement : CharacterBody2D
 		if (IsOnWall() && !IsOnFloor())
 		{
 			velocity += GetGravity()/2 * deltaFloat;
+			stateMachine.TransitionTo("WallSlide"); // Transition to WallSlide state
+			if (VisualsNode != null) // Ensure VisualsNode is assigned in the editor
+			{
+				if (direction.X != 0) // Only flip if there's horizontal input
+				{
+					float newScaleX = Mathf.Abs(VisualsNode.Scale.X);
+					// If scale was somehow 0, default to 1 to avoid issues.
+					if (newScaleX == 0) newScaleX = 1.0f;
+
+					if (direction.X < 0)
+					{
+						VisualsNode.Scale = new Vector2(-newScaleX, VisualsNode.Scale.Y);
+					}
+					else // direction.X > 0
+					{
+						VisualsNode.Scale = new Vector2(newScaleX, VisualsNode.Scale.Y);
+					}
+				}
+			}
+			
+			if (CollisionNode != null) // Ensure VisualsNode is assigned in the editor
+			{
+				if (direction.X != 0) // Only flip if there's horizontal input
+				{
+					float newPosX = Mathf.Abs(CollisionNode.Position.X);
+					// If scale was somehow 0, default to 1 to avoid issues.
+					if (newPosX == 0) newPosX = 1.0f;
+
+					if (direction.X < 0)
+					{
+						CollisionNode.Position = new Vector2(newPosX, CollisionNode.Position.Y);
+					}
+					else // direction.X > 0
+					{
+						CollisionNode.Position = new Vector2(-newPosX, CollisionNode.Position.Y);
+					}
+				}
+			}
 		}
 
 		// 		Wall jump (with wall coyote time)
@@ -158,9 +197,6 @@ public partial class PlayerMovement : CharacterBody2D
 		{
 			velocity.Y *= jumpCutMultiplier; // Cut the jump short
 		}
-
-		// Get the input direction and handle the movement/deceleration.
-		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
 		// Handle visual flipping based on input direction
 		if (VisualsNode != null) // Ensure VisualsNode is assigned in the editor
