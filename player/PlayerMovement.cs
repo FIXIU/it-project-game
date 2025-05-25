@@ -30,6 +30,7 @@ public partial class PlayerMovement : CharacterBody2D
 
 	[Export] public StateMachine stateMachine;
 	[Export] public Node2D VisualsNode { get; set; }
+	[Export] public Node2D CollisionNode { get; set; }
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -177,6 +178,25 @@ public partial class PlayerMovement : CharacterBody2D
 				else // direction.X > 0
 				{
 					VisualsNode.Scale = new Vector2(newScaleX, VisualsNode.Scale.Y);
+				}
+			}
+		}
+		
+		if (CollisionNode != null) // Ensure VisualsNode is assigned in the editor
+		{
+			if (direction.X != 0) // Only flip if there's horizontal input
+			{
+				float newPosX = Mathf.Abs(CollisionNode.Position.X);
+				// If scale was somehow 0, default to 1 to avoid issues.
+				if (newPosX == 0) newPosX = 1.0f;
+
+				if (direction.X < 0)
+				{
+					CollisionNode.Position = new Vector2(newPosX, CollisionNode.Position.Y);
+				}
+				else // direction.X > 0
+				{
+					CollisionNode.Position = new Vector2(-newPosX, CollisionNode.Position.Y);
 				}
 			}
 		}
