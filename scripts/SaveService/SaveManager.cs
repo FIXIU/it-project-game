@@ -1,16 +1,15 @@
 ﻿using Godot;
-using System; // Required for Exception
-
-// Ensure the SaveData class is NOT defined in this file.
-// It should be in its own SaveData.cs file.
+using System;
 
 public partial class SaveManager : Node
 {
     private const string SaveFilePath = "user://savegame.json";
+    private bool _isApplyingLoadedData = false;
+    private Vector2 _pendingPlayerPosition;
 
     public void SaveGame(Vector2 playerPosition, string currentLevelScenePath)
     {
-        var saveData = new SaveData(playerPosition, currentLevelScenePath); // Uses SaveData from SaveData.cs
+        var saveData = new SaveData(playerPosition, currentLevelScenePath);
         string jsonString = saveData.ToJson();
 
         try
@@ -33,7 +32,7 @@ public partial class SaveManager : Node
     public SaveData LoadGame()
     {
         string globalPath = ProjectSettings.GlobalizePath(SaveFilePath);
-        if (!FileAccess.FileExists(SaveFilePath)) // Use original path for FileExists
+        if (!FileAccess.FileExists(SaveFilePath))
         {
             GD.Print("No save file found at: ", globalPath);
             return null;
@@ -49,7 +48,7 @@ public partial class SaveManager : Node
             }
             string jsonString = file.GetAsText();
             
-            SaveData loadedData = SaveData.FromJson(jsonString); // Uses SaveData from SaveData.cs
+            SaveData loadedData = SaveData.FromJson(jsonString);
             if (loadedData != null)
             {
                 GD.Print("Game loaded successfully from: ", globalPath);
@@ -83,8 +82,7 @@ public partial class SaveManager : Node
         if (string.IsNullOrEmpty(currentScenePath))
         {
             GD.PrintErr("Current scene path is empty, cannot save level context.");
-            // Optionally, save with a default/empty scene path or prevent saving
-            // return; 
+            return; 
         }
         SaveGame(player.GlobalPosition, currentScenePath);
     }
@@ -97,50 +95,163 @@ public partial class SaveManager : Node
             return;
         }
 
+        if (_isApplyingLoadedData)
+        {
+            GD.Print("Load already in progress, ignoring duplicate request.");
+            return;
+        }
+
         if (string.IsNullOrEmpty(data.CurrentLevelScenePath))
         {
             GD.PrintErr("Loaded data contains an empty scene path. Cannot change scene.");
             return;
         }
         
+        _isApplyingLoadedData = true;
+        _pendingPlayerPosition = data.PlayerPosition;
+        
         GD.Print($"Attempting to load level: {data.CurrentLevelScenePath}");
+        
         Error err = GetTree().ChangeSceneToFile(data.CurrentLevelScenePath);
         if (err != Error.Ok)
         {
             GD.PrintErr($"Failed to load level '{data.CurrentLevelScenePath}': {err}");
+            _isApplyingLoadedData = false;
             return;
         }
 
-        // Deferred call to set player position after scene is loaded
-        Callable.From(() => OnSceneLoadedSetPlayerPosition(data.PlayerPosition)).CallDeferred();
+        // Use a more robust method to wait for scene loading
+        StartPlayerPositionSetupRoutine();
     }
     
-    private void OnSceneLoadedSetPlayerPosition(Vector2 position)
+    private async void StartPlayerPositionSetupRoutine()
+    {
+        // Wait for multiple frames and keep checking if scene is ready
+        for (int attempts = 0; attempts < 60; attempts++) // Max 1 second at 60 FPS
+        {
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            
+            if (GetTree().CurrentScene != null)
+            {
+                // Scene is loaded, now try to set player position
+                bool success = TrySetPlayerPosition(_pendingPlayerPosition);
+                if (success)
+                {
+                    GD.Print("Successfully set player position after scene load.");
+                    break;
+                }
+                else if (attempts > 10) // Give it a few more frames for player to initialize
+                {
+                    GD.PrintErr("Failed to find player node after multiple attempts.");
+                    PrintSceneStructure(GetTree().CurrentScene, 0, 3);
+                    break;
+                }
+            }
+        }
+        
+        _isApplyingLoadedData = false;
+    }
+    
+    private bool TrySetPlayerPosition(Vector2 position)
     {
         if (GetTree().CurrentScene == null)
         {
-            GD.PrintErr("Current scene is null after scene change. Cannot set player position.");
-            return;
+            return false;
         }
-        // Attempt to find player node. This might need adjustment based on your scene structure.
-        // Common names: "Player", "Character". Adjust type if not Node2D (e.g. CharacterBody2D).
-        var player = GetTree().CurrentScene.GetNode<Node2D>("Player"); 
+        
+        // Try multiple possible player node paths
+        Node player = null;
+        string[] playerPaths = { 
+            "Player",           // Direct child named Player
+            "*/Player",         // Player one level deep
+            "**/Player"         // Player anywhere in the tree
+        };
+        
+        foreach (string path in playerPaths)
+        {
+            player = GetTree().CurrentScene.GetNodeOrNull(path);
+            if (player != null)
+            {
+                GD.Print($"Found player at path: {path}");
+                break;
+            }
+        }
+        
+        // If still not found, try searching by type
+        if (player == null)
+        {
+            player = FindPlayerByType(GetTree().CurrentScene);
+        }
+        
         if (player != null && IsInstanceValid(player))
         {
-            player.GlobalPosition = position;
-            GD.Print($"Player position set to: {position} in scene {GetTree().CurrentScene.SceneFilePath}");
+            if (player is CharacterBody2D characterBody)
+            {
+                characterBody.GlobalPosition = position;
+                GD.Print($"Player (CharacterBody2D) position set to: {position} in scene {GetTree().CurrentScene.SceneFilePath}");
+                return true;
+            }
+            else if (player is Node2D node2D)
+            {
+                node2D.GlobalPosition = position;
+                GD.Print($"Player (Node2D) position set to: {position} in scene {GetTree().CurrentScene.SceneFilePath}");
+                return true;
+            }
+            else
+            {
+                GD.PrintErr($"Found player node but it's not a Node2D or CharacterBody2D: {player.GetType()}");
+            }
         }
-        else
+        
+        return false;
+    }
+    
+    private Node FindPlayerByType(Node parent)
+    {
+        // Check if this node is a player (in the Player group or has specific script)
+        if (parent.IsInGroup("Player"))
         {
-            GD.PrintErr("Could not find player node named 'Player' (type Node2D) in the loaded scene to set position.");
-            GD.Print("Ensure your player node is named 'Player' and is a direct child of the scene root, or adjust the GetNode path.");
+            return parent;
+        }
+        
+        // Check if it's a CharacterBody2D with player-like characteristics
+        if (parent is CharacterBody2D body && (
+            parent.Name.ToString().ToLower().Contains("player") ||
+            parent.HasMethod("_physics_process") // Assuming player has physics processing
+        ))
+        {
+            return parent;
+        }
+        
+        // Recursively check children
+        foreach (Node child in parent.GetChildren())
+        {
+            Node result = FindPlayerByType(child);
+            if (result != null) return result;
+        }
+        
+        return null;
+    }
+    
+    private void PrintSceneStructure(Node node, int depth, int maxDepth)
+    {
+        if (depth > maxDepth) return;
+        
+        string indent = new string(' ', depth * 2);
+        string groups = "";
+        if (node.GetGroups().Count > 0)
+        {
+            groups = $" [Groups: {string.Join(", ", node.GetGroups())}]";
+        }
+        GD.Print($"{indent}{node.Name} ({node.GetType().Name}){groups}");
+        
+        foreach (Node child in node.GetChildren())
+        {
+            PrintSceneStructure(child, depth + 1, maxDepth);
         }
     }
 }
 
-// Dummy PlayerCharacter class for the example. 
-// You should replace this with your actual player class if it's different.
-// If your player class is already defined elsewhere, you can remove this.
 public partial class PlayerCharacter : CharacterBody2D
 {
     // This is just a placeholder. Your actual player script would be more complex.
