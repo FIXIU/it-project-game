@@ -201,7 +201,7 @@ libraries = {
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Resume" to="." method="OnResumeButtonPressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Button" to="." method="OnLoadLastSaveButtonPressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="OnRestartLevelButtonPressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="OnRestartLevelButtonPressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Quit to Main Menu" to="." method="OnQuitToMainMenuButtonPressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Quit to Desktop" to="." method="OnQuitGameButtonPressed"]
