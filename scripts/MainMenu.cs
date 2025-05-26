@@ -14,26 +14,6 @@ public partial class MainMenu : Control
             GD.PrintErr("MainMenu: SaveManager not found.");
             return;
         }
-
-        // Setup Load Game button
-        _loadGameButton = GetNode<Button>("LoadGameButton"); 
-        if (_loadGameButton == null)
-        {
-            GD.PrintErr("MainMenu: LoadGameButton not found.");
-            return;
-        }
-        _loadGameButton.Pressed += OnLoadGameButtonPressed;
-
-        // Setup New Game button
-        _newGameButton = GetNode<Button>("NewGameButton");
-        if (_newGameButton == null)
-        {
-            GD.PrintErr("MainMenu: NewGameButton not found.");
-            return;
-        }
-        _newGameButton.Pressed += OnNewGameButtonPressed;
-
-        // Update load button state based on save file existence
         UpdateLoadButtonState();
     }
 

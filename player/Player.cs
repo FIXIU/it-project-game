@@ -3,5 +3,4 @@ using System;
 
 public partial class Player : PlayerMovement
 {
-	
 }
