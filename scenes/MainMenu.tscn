@@ -19,4 +19,13 @@ offset_right = 131.0
 offset_bottom = 40.0
 text = "Load Game"
 
+[node name="NewGameButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 55.0
+offset_right = 128.0
+offset_bottom = 86.0
+text = "New Game"
+
 [connection signal="pressed" from="LoadGameButton" to="." method="OnLoadGameButtonPressed"]
+[connection signal="pressed" from="NewGameButton" to="." method="OnNewGameButtonPresseds"]

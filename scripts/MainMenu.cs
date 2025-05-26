@@ -4,6 +4,7 @@ public partial class MainMenu : Control
 {
     private SaveManager _saveManager;
     private Button _loadGameButton;
+    private Button _newGameButton; // Add this
 
     public override void _Ready()
     {
@@ -14,20 +15,61 @@ public partial class MainMenu : Control
             return;
         }
 
+        // Setup Load Game button
         _loadGameButton = GetNode<Button>("LoadGameButton"); 
         if (_loadGameButton == null)
         {
             GD.PrintErr("MainMenu: LoadGameButton not found.");
             return;
         }
-
         _loadGameButton.Pressed += OnLoadGameButtonPressed;
 
+        // Setup New Game button
+        _newGameButton = GetNode<Button>("NewGameButton");
+        if (_newGameButton == null)
+        {
+            GD.PrintErr("MainMenu: NewGameButton not found.");
+            return;
+        }
+        _newGameButton.Pressed += OnNewGameButtonPressed;
+
+        // Update load button state based on save file existence
+        UpdateLoadButtonState();
+    }
+
+    private void UpdateLoadButtonState()
+    {
         if (!FileAccess.FileExists("user://savegame.json"))
         {
             _loadGameButton.Disabled = true;
             _loadGameButton.Text = "Load Game (No Save)";
         }
+        else
+        {
+            _loadGameButton.Disabled = false;
+            _loadGameButton.Text = "Load Game";
+        }
+    }
+
+    private void OnNewGameButtonPressed()
+    {
+        GD.Print("New Game button pressed.");
+        if (_saveManager == null)
+        {
+            GD.PrintErr("MainMenu: Cannot start new game, SaveManager instance is missing.");
+            return;
+        }
+
+        // Disable both buttons to prevent rapid clicks
+        _newGameButton.Disabled = true;
+        _loadGameButton.Disabled = true;
+
+        // Optionally clear existing save file for a fresh start
+        // Uncomment the next line if you want to clear saves when starting new game
+        // _saveManager.ClearSaveFile();
+
+        // Start the new game
+        _saveManager.StartNewGame();
     }
 
     private void OnLoadGameButtonPressed()
@@ -39,8 +81,9 @@ public partial class MainMenu : Control
             return;
         }
 
-        // Disable the button immediately to prevent rapid re-clicks
-        _loadGameButton.Disabled = true; 
+        // Disable both buttons immediately to prevent rapid re-clicks
+        _loadGameButton.Disabled = true;
+        _newGameButton.Disabled = true;
 
         SaveData loadedData = _saveManager.LoadGame();
 
@@ -48,14 +91,13 @@ public partial class MainMenu : Control
         {
             GD.Print("MainMenu: Data loaded successfully. Applying data...");
             _saveManager.ApplyLoadedData(loadedData);
-            // The scene will change. If loading fails and we stay on the menu,
-            // we might need a callback from SaveManager to re-enable the button,
-            // but the _isApplyingLoadedData flag in SaveManager helps prevent issues.
         }
         else
         {
             GD.PrintErr("MainMenu: Failed to load game data or no save file exists.");
-            _loadGameButton.Disabled = false; // Re-enable if loading didn't even start (e.g. file not found by LoadGame)
+            // Re-enable buttons if loading failed
+            _newGameButton.Disabled = false;
+            UpdateLoadButtonState();
         }
     }
 }

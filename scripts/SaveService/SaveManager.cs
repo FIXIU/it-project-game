@@ -6,7 +6,54 @@ public partial class SaveManager : Node
     private const string SaveFilePath = "user://savegame.json";
     private bool _isApplyingLoadedData = false;
     private Vector2 _pendingPlayerPosition;
+    
+    
+    private const string DefaultStartingLevel = "res://scenes/level_1.tscn";
+    private readonly Vector2 DefaultStartingPosition = new Vector2(-64, 2); // Based on your level_1.tscn
 
+    public void StartNewGame()
+    {
+        if (_isApplyingLoadedData)
+        {
+            GD.Print("Game loading already in progress, ignoring new game request.");
+            return;
+        }
+
+        GD.Print($"Starting new game at: {DefaultStartingLevel}");
+        
+        _isApplyingLoadedData = true;
+        _pendingPlayerPosition = DefaultStartingPosition;
+        
+        Error err = GetTree().ChangeSceneToFile(DefaultStartingLevel);
+        if (err != Error.Ok)
+        {
+            GD.PrintErr($"Failed to load starting level '{DefaultStartingLevel}': {err}");
+            _isApplyingLoadedData = false;
+            return;
+        }
+
+        // Use the same method to wait for scene loading and set player position
+        StartPlayerPositionSetupRoutine();
+    }
+
+    // Optional: Clear save file when starting new game
+    public void ClearSaveFile()
+    {
+        if (FileAccess.FileExists(SaveFilePath))
+        {
+            try
+            {
+                DirAccess.RemoveAbsolute(ProjectSettings.GlobalizePath(SaveFilePath));
+                GD.Print("Save file cleared for new game.");
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr($"Failed to clear save file: {e.Message}");
+            }
+        }
+    }
+
+    // Your existing methods...
     public void SaveGame(Vector2 playerPosition, string currentLevelScenePath)
     {
         var saveData = new SaveData(playerPosition, currentLevelScenePath);
