@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://c1wk2618nrq8r"]
+[gd_scene load_steps=7 format=4 uid="uid://c1wk2618nrq8r"]
 
 [ext_resource type="Texture2D" uid="uid://cpteftqjqnnbu" path="res://assets/TileMapStartingCave.png" id="1_014kd"]
 [ext_resource type="PackedScene" uid="uid://y62dyumysbu2" path="res://player/Player.tscn" id="2_bswci"]
 [ext_resource type="PackedScene" uid="uid://dc2whp0tokc4o" path="res://scenes/Props/save_point.tscn" id="3_rus8k"]
+[ext_resource type="PackedScene" uid="uid://7wuuw6emwa6u" path="res://scenes/PauseMenu.tscn" id="4_5xbjy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bswci"]
 texture = ExtResource("1_014kd")
@@ -136,3 +137,7 @@ position = Vector2(-64, 2)
 
 [node name="SavePoint" parent="." instance=ExtResource("3_rus8k")]
 position = Vector2(77, 3)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("4_5xbjy")]
