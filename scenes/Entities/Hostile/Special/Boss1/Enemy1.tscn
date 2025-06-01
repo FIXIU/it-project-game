@@ -1433,23 +1433,25 @@ _data = {
 &"RESET": SubResource("Animation_b08l3")
 }
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("VisualsNode")]
 collision_layer = 0
 script = ExtResource("1_lsiai")
+StateMachinePath = NodePath("FSM")
+VisualsNode = NodePath("BossAnimator/Sprite2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -16)
 shape = SubResource("RectangleShape2D_44cqv")
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="BossAnimator" type="Node2D" parent="."]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Node2D"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BossAnimator"]
 libraries = {
 &"": SubResource("AnimationLibrary_cfjp7")
 }
 speed_scale = 0.5
 
-[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
+[node name="Sprite2D" type="Sprite2D" parent="BossAnimator"]
 texture_filter = 1
 texture = ExtResource("1_lym4s")
 offset = Vector2(6, -28)
@@ -1493,16 +1495,16 @@ initialState = NodePath("Idle")
 [node name="Idle" type="Node" parent="FSM"]
 script = ExtResource("3_0eafm")
 
-[node name="Run" type="Node" parent="FSM"]
+[node name="Walk" type="Node" parent="FSM"]
 script = ExtResource("4_2fjnr")
 
 [node name="Jump" type="Node" parent="FSM"]
 script = ExtResource("5_30l5e")
 
-[node name="Fall" type="Node" parent="FSM"]
+[node name="Death" type="Node" parent="FSM"]
 script = ExtResource("6_62kot")
 
-[node name="WallSlide" type="Node" parent="FSM"]
+[node name="Dash" type="Node" parent="FSM"]
 script = ExtResource("7_uanfv")
 
 [node name="Attack" type="Node" parent="FSM"]
