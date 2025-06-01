@@ -17,8 +17,8 @@ public partial class MainMenu : Control
         }
 
         // initialize UI buttons
-        _loadGameButton = GetNode<Button>("LoadGameButton");
-        _newGameButton  = GetNode<Button>("NewGameButton");
+        _loadGameButton = GetNode<Button>("PanelContainer/VBoxContainer/LoadGameButton");
+        _newGameButton  = GetNode<Button>("PanelContainer/VBoxContainer/NewGameButton");
 
         // now safely update state
         UpdateLoadButtonState();

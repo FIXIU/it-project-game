@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://y62dyumysbu2"]
+[gd_scene load_steps=28 format=3 uid="uid://y62dyumysbu2"]
 
 [ext_resource type="Script" uid="uid://hdr5es67n23d" path="res://player/Player.cs" id="1_3c3w1"]
 [ext_resource type="Texture2D" uid="uid://donff0j7pkkr1" path="res://assets/player/specter_idle-Idle.png" id="2_wnvi2"]
@@ -19,6 +19,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3c3w1"]
 size = Vector2(23, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t8epa"]
+size = Vector2(24, 38)
 
 [sub_resource type="Animation" id="Animation_ndjxb"]
 resource_name = "Fall"
@@ -847,6 +850,13 @@ CollisionNode = NodePath("CollisionShape2D")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -24)
 shape = SubResource("RectangleShape2D_3c3w1")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+position = Vector2(-6, -22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_t8epa")
 
 [node name="Node2D" parent="." instance=ExtResource("3_wnvi2")]
 visible = false

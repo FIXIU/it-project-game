@@ -96,5 +96,7 @@ public partial class SavePoint : Area2D
         
         // Optional: Play a sound, show a "Game Saved!" message, or an animation.
         GD.Print("Game save initiated by SavePoint.");
+        GetNode<CpuParticles2D>("../SuccessParticleEmitter").Emitting = true;
+        GetNode<CpuParticles2D>("../SuccessParticleEmitter").Restart();
     }
 }
