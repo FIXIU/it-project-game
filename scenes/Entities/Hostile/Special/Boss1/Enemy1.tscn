@@ -1,5 +1,6 @@
-[gd_scene load_steps=28 format=3 uid="uid://bvjno4a3p0no5"]
+[gd_scene load_steps=29 format=3 uid="uid://bvjno4a3p0no5"]
 
+[ext_resource type="Script" uid="uid://cd4hhi537k81f" path="res://scenes/Entities/Hostile/Special/Boss1/Enemy1.cs" id="1_lsiai"]
 [ext_resource type="Texture2D" uid="uid://vfe06ky0gmwr" path="res://assets/enemy/spr_Idle_strip.png" id="1_lym4s"]
 [ext_resource type="Texture2D" uid="uid://bltydygitw0nb" path="res://assets/enemy/spr_Attack_strip.png" id="2_0eafm"]
 [ext_resource type="Script" uid="uid://dtp5hsbc64ydp" path="res://scripts/FSM/StateMachine.cs" id="2_xrs0q"]
@@ -1434,6 +1435,7 @@ _data = {
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 0
+script = ExtResource("1_lsiai")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -16)
