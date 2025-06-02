@@ -19,16 +19,6 @@ public partial class BossDeath : State
         // Stop all movement
         boss.Velocity = Vector2.Zero;
 
-        // Disable collision or other cleanup
-        if (boss.AttackArea != null)
-        {
-            boss.AttackArea.SetDeferred("monitoring", false);
-        }
-        if (boss.DetectionArea != null)
-        {
-            boss.DetectionArea.SetDeferred("monitoring", false);
-        }
-
         GD.Print($"Boss Death State: Playing 'spr_Death_strip'");
     }
 

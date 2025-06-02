@@ -841,7 +841,7 @@ _data = {
 &"WallSlide": SubResource("Animation_v4f8b")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "VisualsNode", "CollisionNode") groups=["player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "VisualsNode", "CollisionNode") groups=["player", "player_local"]]
 texture_filter = 1
 collision_layer = 0
 script = ExtResource("1_3c3w1")
@@ -863,7 +863,7 @@ shape = SubResource("RectangleShape2D_t8epa")
 [node name="Node2D" parent="." instance=ExtResource("3_wnvi2")]
 visible = false
 
-[node name="Camera2D" type="Camera2D" parent="." groups=["player"]]
+[node name="Camera2D" type="Camera2D" parent="." groups=["player_local"]]
 offset = Vector2(0, -32)
 position_smoothing_enabled = true
 position_smoothing_speed = 20.0

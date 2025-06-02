@@ -20,7 +20,7 @@ public partial class BossAttack : State
         // Stop movement during attack
         boss.Velocity = new Vector2(0, boss.Velocity.Y);
 
-        GD.Print($"Boss Attack State: Playing 'spr_Attack_strip'");
+        GD.Print($"Boss Attack State: Playing 'Attack'");
     }
 
     public override void Update(double delta)
@@ -41,7 +41,7 @@ public partial class BossAttack : State
         {
             boss.StartAttackCooldown();
 
-            // Decide next state
+            // Decide next state using new raycast-based detection
             if (boss.CanSeePlayer() && boss.GetDistanceToPlayer() > boss.AttackRange)
             {
                 fsm?.TransitionTo("Walk");
@@ -55,8 +55,8 @@ public partial class BossAttack : State
 
     private void PerformAttack()
     {
-        // Deal damage to player if in range
-        if (boss.PlayerInRange && boss.Player != null)
+        // Deal damage to player if in attack range with clear line of sight
+        if (boss.CanAttackPlayer() && boss.Player != null)
         {
             // Try to call TakeDamage on player
             if (boss.Player.HasMethod("TakeDamage"))

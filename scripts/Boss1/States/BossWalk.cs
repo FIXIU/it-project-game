@@ -3,10 +3,9 @@ using Godot;
 public partial class BossWalk : State
 {
     private Boss boss;
+    private Vector2 walkDirection;
     private float walkTime = 0.0f;
     private float maxWalkTime = 3.0f;
-    private Vector2 walkDirection;
-    private bool hasTarget = false;
 
     public override void Enter()
     {
@@ -16,20 +15,18 @@ public partial class BossWalk : State
 
         walkTime = 0.0f;
 
-        // Determine walk direction
-        if (boss.CanSeePlayer())
+        // Determine walk direction towards player
+        if (boss.Player != null)
         {
             walkDirection = boss.GetDirectionToPlayer();
-            hasTarget = true;
         }
         else
         {
-            // Random walk direction
-            walkDirection = new Vector2(GD.Randf() > 0.5f ? 1.0f : -1.0f, 0);
-            hasTarget = false;
+            // Random direction if no player
+            walkDirection = new Vector2(GD.Randf() > 0.5f ? 1 : -1, 0);
         }
 
-        GD.Print($"Boss Walk State: Playing 'spr_Walk_strip'. Direction: {walkDirection}");
+        GD.Print($"Boss Walk State: Moving towards target");
     }
 
     public override void Update(double delta)
@@ -38,16 +35,15 @@ public partial class BossWalk : State
 
         walkTime += (float)delta;
         
-        
         // Move towards target
         boss.Velocity = new Vector2(walkDirection.X * boss.Speed, boss.Velocity.Y);
 
-        // Check if player is in attack range
+        // Check if player is in attack range using new raycast detection
         if (boss.CanSeePlayer())
         {
             float distanceToPlayer = boss.GetDistanceToPlayer();
 
-            if (distanceToPlayer <= boss.AttackRange && boss.PlayerInRange && boss.CanAttack)
+            if (distanceToPlayer <= boss.AttackRange && boss.CanAttackPlayer())
             {
                 // Stop and attack
                 boss.Velocity = new Vector2(0, boss.Velocity.Y);
@@ -65,24 +61,17 @@ public partial class BossWalk : State
                 {
                     fsm?.TransitionTo("Attack");
                 }
-                return;
             }
-
-            // Update direction to player
-            walkDirection = boss.GetDirectionToPlayer();
-
-            // Consider jumping if there's an obstacle
-            if (boss.IsOnFloor() && GD.Randf() > 0.9f)
+            else if (distanceToPlayer <= boss.AttackRange * 0.8f)
             {
-                fsm?.TransitionTo("Jump");
-                return;
+                // Close enough, prepare to attack
+                fsm?.TransitionTo("Idle");
             }
         }
 
-        // Return to idle after walking for too long
-        if (walkTime >= maxWalkTime || (!hasTarget && walkTime >= 1.5f))
+        // Stop walking if been walking too long or lost player
+        if (walkTime >= maxWalkTime || (!boss.CanSeePlayer() && walkTime > 1.0f))
         {
-            boss.Velocity = new Vector2(0, boss.Velocity.Y);
             fsm?.TransitionTo("Idle");
         }
     }

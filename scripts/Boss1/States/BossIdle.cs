@@ -13,7 +13,9 @@ public partial class BossIdle : State
         animationPlayer.Play("Idle");
 
         idleTime = 0.0f;
-        GD.Print($"Boss Idle State: Playing 'spr_Idle_strip'. Current animation: {animationPlayer.CurrentAnimation}");
+        boss.Velocity = new Vector2(0, boss.Velocity.Y);
+
+        GD.Print($"Boss Idle State: Playing 'Idle'");
     }
 
     public override void Update(double delta)
@@ -28,7 +30,8 @@ public partial class BossIdle : State
             GD.Print("Player detected, transitioning to attack or walk state.");
             float distanceToPlayer = boss.GetDistanceToPlayer();
 
-            if (distanceToPlayer <= boss.AttackRange && boss.PlayerInRange && boss.CanAttack)
+            // Use the new raycast-based attack detection
+            if (distanceToPlayer <= boss.AttackRange && boss.CanAttackPlayer())
             {
                 // Choose random attack
                 var attacks = new string[] { "Attack", "SpinAttack" };
@@ -45,9 +48,16 @@ public partial class BossIdle : State
         // Random behavior when idle for too long
         if (idleTime >= maxIdleTime && !boss.PlayerDetected)
         {
-            var randomActions = new string[] { "Taunt", "Walk" };
-            string randomAction = randomActions[GD.RandRange(0, randomActions.Length - 1)];
-            fsm?.TransitionTo(randomAction);
+            // Random movement or taunt
+            if (GD.Randf() > 0.5f)
+            {
+                fsm?.TransitionTo("Walk");
+            }
         }
+    }
+
+    public override void Exit()
+    {
+        // Clean up if needed
     }
 }

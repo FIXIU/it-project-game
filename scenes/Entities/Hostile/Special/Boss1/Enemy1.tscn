@@ -1715,12 +1715,14 @@ script = ExtResource("18_gwv3i")
 script = ExtResource("19_yggyu")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 position = Vector2(1, -76)
 shape = SubResource("RectangleShape2D_r8m1b")
 
 [node name="AttackArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 position = Vector2(1, -30)
@@ -1731,6 +1733,8 @@ wait_time = 5.0
 
 [node name="AttackCooldownTimer" type="Timer" parent="."]
 wait_time = 3.0
+
+[node name="LineOfSightRay" type="RayCast2D" parent="."]
 
 [connection signal="body_entered" from="DetectionArea" to="." method="OnDetectionAreaBodyEntered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="OnDetectionAreaBodyExited"]

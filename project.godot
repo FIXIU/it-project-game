@@ -31,6 +31,10 @@ window/stretch/scale_mode="integer"
 
 project/assembly_name="Sandbox"
 
+[global_group]
+
+player=""
+
 [input]
 
 ui_left={

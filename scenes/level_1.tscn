@@ -134,7 +134,7 @@ tile_set = SubResource("TileSet_rus8k")
 occlusion_enabled = false
 
 [node name="Player" parent="." instance=ExtResource("2_bswci")]
-position = Vector2(-64, 2)
+position = Vector2(350, -449)
 
 [node name="SavePoint" parent="." instance=ExtResource("3_rus8k")]
 position = Vector2(77, 3)
@@ -144,5 +144,5 @@ position = Vector2(77, 3)
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("4_5xbjy")]
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("5_4nkto")]
-position = Vector2(333, -13)
+position = Vector2(-107, -22)
 scale = Vector2(2, 2)
