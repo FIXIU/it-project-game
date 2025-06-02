@@ -16,13 +16,11 @@ public partial class BossJump : State
         hasJumped = false;
         jumpTimer = 0.0f;
 
-        // Perform jump
         if (boss.IsOnFloor())
         {
             boss.Velocity = new Vector2(boss.Velocity.X, boss.JumpVelocity);
             hasJumped = true;
 
-            // Add horizontal movement towards player if detected
             if (boss.CanSeePlayer())
             {
                 Vector2 direction = boss.GetDirectionToPlayer();
@@ -39,38 +37,12 @@ public partial class BossJump : State
 
         jumpTimer += (float)delta;
 
-        // Continue horizontal movement during jump
-        if (hasJumped && boss.CanSeePlayer())
-        {
-            Vector2 direction = boss.GetDirectionToPlayer();
-            boss.Velocity = new Vector2(direction.X * boss.Speed * 0.5f, boss.Velocity.Y);
-        }
-
-        // Check if landed
         if (hasJumped && boss.IsOnFloor() && jumpTimer > 0.5f)
         {
-            // Landing - decide next action
-            if (boss.CanSeePlayer())
-            {
-                float distanceToPlayer = boss.GetDistanceToPlayer();
-
-                if (distanceToPlayer <= boss.AttackRange && boss.CanAttack)
-                {
-                    fsm?.TransitionTo("Attack");
-                }
-                else
-                {
-                    fsm?.TransitionTo("Walk");
-                }
-            }
-            else
-            {
-                fsm?.TransitionTo("Idle");
-            }
+            fsm?.TransitionTo("Idle");
             return;
         }
 
-        // Timeout if jump takes too long
         if (jumpTimer >= maxJumpTime)
         {
             fsm?.TransitionTo("Idle");

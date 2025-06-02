@@ -5,13 +5,13 @@ public partial class PauseMenu : Control
 {
     private Button _resumeButton;
     private Button _saveGameButton;
-    private Button _loadLastSaveButton; // Added
+    private Button _loadLastSaveButton;
     private Button _quitButton;
     private SaveManager _saveManager;
 
     [Export] AnimationPlayer _animationPlayer;
 
-    private const string SaveFilePath = "user://savegame.json"; // Define save file path
+    private const string SaveFilePath = "user://savegame.json";
 
     public override void _Ready()
     {
@@ -89,35 +89,30 @@ public partial class PauseMenu : Control
         }
 
         GD.Print("PauseMenu: Load Last Save button pressed.");
-        GetTree().Paused = false; // Unpause before loading/changing scene
+        GetTree().Paused = false;
 
         SaveData loadedData = _saveManager.LoadGame();
 
         if (loadedData != null)
         {
-            // The PauseMenu instance will be freed if the scene changes.
             _saveManager.ApplyLoadedData(loadedData);
-            // If ApplyLoadedData doesn't change scene or fails to, the game remains unpaused.
         }
         else
         {
             GD.PrintErr("PauseMenu: Failed to load game data.");
-            // Game is unpaused here. Player can re-pause if needed.
-            UpdateLoadLastSaveButtonState(); // Re-check button state
+            UpdateLoadLastSaveButtonState();
         }
     }
 
     private void OnRestartLevelButtonPressed()
     {
         GD.Print("PauseMenu: Restart Level button pressed.");
-        GetTree().Paused = false; // Unpause before reloading
+        GetTree().Paused = false;
         var error = GetTree().ReloadCurrentScene();
         if (error != Error.Ok)
         {
             GD.PrintErr($"PauseMenu: Error restarting level: {error}");
         }
-        // If reloading fails, the game will be unpaused.
-        // Consider re-pausing or handling the error more gracefully.
     }
 
     private void OnQuitToMainMenuButtonPressed()
@@ -134,7 +129,8 @@ public partial class PauseMenu : Control
     private void OnQuitGameButtonPressed()
     {
         GD.Print("PauseMenu: Quit Game button pressed.");
-        GetTree().Paused = false; // Unpause before quitting
+        GetTree().Paused = false;
         GetTree().Quit();
     }
 }
+

@@ -8,7 +8,6 @@ public partial class MainMenu : Control
 
     public override void _Ready()
     {
-        // grab SaveManager
         _saveManager = GetNode<SaveManager>("/root/SaveManager");
         if (_saveManager == null)
         {
@@ -16,11 +15,9 @@ public partial class MainMenu : Control
             return;
         }
 
-        // initialize UI buttons
         _loadGameButton = GetNode<Button>("PanelContainer/VBoxContainer/LoadGameButton");
         _newGameButton  = GetNode<Button>("PanelContainer/VBoxContainer/NewGameButton");
 
-        // now safely update state
         UpdateLoadButtonState();
     }
 
@@ -78,3 +75,4 @@ public partial class MainMenu : Control
         }
     }
 }
+

@@ -16,7 +16,6 @@ public partial class BossDeath : State
         deathStarted = true;
         deathTimer = 0.0f;
 
-        // Stop all movement
         boss.Velocity = Vector2.Zero;
 
         GD.Print($"Boss Death State: Playing 'spr_Death_strip'");
@@ -26,29 +25,13 @@ public partial class BossDeath : State
     {
         deathTimer += (float)delta;
 
-        // Keep boss motionless
         boss.Velocity = Vector2.Zero;
-
-        // Optional: Add death effects, screen shake, etc.
-
-        // After death animation completes, you could:
-        // - Remove the boss from scene
-        // - Trigger end game sequence
-        // - Drop loot, etc.
 
         if (deathTimer >= deathDuration)
         {
-            // Death sequence complete
-            GD.Print("Boss death sequence complete");
-
-            // Optional: Queue free the boss or trigger end game
-            // boss.QueueFree();
+            boss.QueueFree();
+            GD.Print("Boss defeated and removed from scene!");
         }
     }
-
-    public override void Exit()
-    {
-        // This state should not be exited once entered
-        // Boss is dead and stays dead
-    }
 }
+

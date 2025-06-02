@@ -7,9 +7,8 @@ public partial class SaveManager : Node
     private bool _isApplyingLoadedData = false;
     private Vector2 _pendingPlayerPosition;
     
-    
     private const string DefaultStartingLevel = "res://scenes/level_1.tscn";
-    private readonly Vector2 DefaultStartingPosition = new Vector2(-64, 2); // Based on your level_1.tscn
+    private readonly Vector2 DefaultStartingPosition = new Vector2(-64, 2);
 
     public void StartNewGame()
     {
@@ -32,11 +31,9 @@ public partial class SaveManager : Node
             return;
         }
 
-        // Use the same method to wait for scene loading and set player position
         StartPlayerPositionSetupRoutine();
     }
 
-    // Optional: Clear save file when starting new game
     public void ClearSaveFile()
     {
         if (FileAccess.FileExists(SaveFilePath))
@@ -53,7 +50,6 @@ public partial class SaveManager : Node
         }
     }
 
-    // Your existing methods...
     public void SaveGame(Vector2 playerPosition, string currentLevelScenePath)
     {
         var saveData = new SaveData(playerPosition, currentLevelScenePath);
@@ -167,27 +163,24 @@ public partial class SaveManager : Node
             return;
         }
 
-        // Use a more robust method to wait for scene loading
         StartPlayerPositionSetupRoutine();
     }
     
     private async void StartPlayerPositionSetupRoutine()
     {
-        // Wait for multiple frames and keep checking if scene is ready
-        for (int attempts = 0; attempts < 60; attempts++) // Max 1 second at 60 FPS
+        for (int attempts = 0; attempts < 60; attempts++)
         {
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             
             if (GetTree().CurrentScene != null)
             {
-                // Scene is loaded, now try to set player position
                 bool success = TrySetPlayerPosition(_pendingPlayerPosition);
                 if (success)
                 {
                     GD.Print("Successfully set player position after scene load.");
                     break;
                 }
-                else if (attempts > 10) // Give it a few more frames for player to initialize
+                else if (attempts > 10)
                 {
                     GD.PrintErr("Failed to find player node after multiple attempts.");
                     PrintSceneStructure(GetTree().CurrentScene, 0, 3);
@@ -206,12 +199,11 @@ public partial class SaveManager : Node
             return false;
         }
         
-        // Try multiple possible player node paths
         Node player = null;
         string[] playerPaths = { 
-            "Player",           // Direct child named Player
-            "*/Player",         // Player one level deep
-            "**/Player"         // Player anywhere in the tree
+            "Player",
+            "*/Player",
+            "**/Player"
         };
         
         foreach (string path in playerPaths)
@@ -224,7 +216,6 @@ public partial class SaveManager : Node
             }
         }
         
-        // If still not found, try searching by type
         if (player == null)
         {
             player = FindPlayerByType(GetTree().CurrentScene);
@@ -255,22 +246,19 @@ public partial class SaveManager : Node
     
     private Node FindPlayerByType(Node parent)
     {
-        // Check if this node is a player (in the Player group or has specific script)
         if (parent.IsInGroup("Player"))
         {
             return parent;
         }
         
-        // Check if it's a CharacterBody2D with player-like characteristics
         if (parent is CharacterBody2D body && (
             parent.Name.ToString().ToLower().Contains("player") ||
-            parent.HasMethod("_physics_process") // Assuming player has physics processing
+            parent.HasMethod("_physics_process")
         ))
         {
             return parent;
         }
         
-        // Recursively check children
         foreach (Node child in parent.GetChildren())
         {
             Node result = FindPlayerByType(child);
@@ -301,5 +289,5 @@ public partial class SaveManager : Node
 
 public partial class PlayerCharacter : CharacterBody2D
 {
-    // This is just a placeholder. Your actual player script would be more complex.
 }
+

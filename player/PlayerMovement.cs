@@ -3,49 +3,30 @@ using System;
 
 public partial class PlayerMovement : CharacterBody2D
 {
-    // Movement constants
     public const float Speed = 220.0f;
     public const float JumpVelocity = -400.0f;
-    
-    // Variable jump parameters
     [Export] private float jumpCutMultiplier = 0.4f;
     [Export] private float minJumpVelocity = -150.0f;
-    
-    // Wall jump parameters
     [Export] private float wallJumpBoostTime = 0.3f;
     [Export] private float wallJumpSpeedMultiplier = 1.5f;
-    [Export] private float wallJumpPlayerInfluence = 0.2f; // How much player can control during wall jump
-    
-    // Coyote time parameters
+    [Export] private float wallJumpPlayerInfluence = 0.2f;
     [Export] private float coyoteTimeMax = 0.15f;
     [Export] private float wallCoyoteTimeMax = 0.1f;
-    
-    // State tracking
     private bool isJumping = false;
     private bool wasOnFloor = false;
     private bool wasOnWall = false;
-    
-    // Timers
     private float currentWallJumpTime = 0f;
     private float coyoteTimeLeft = 0f;
     private float wallCoyoteTimeLeft = 0f;
-    
-    // Wall jump data
     private float wallJumpForce = 0f;
     private int wallJumpDirection = 0;
     private Vector2 lastWallNormal = Vector2.Zero;
-    
-    // Cached references
     [Export] public StateMachine stateMachine;
     [Export] public Node2D VisualsNode { get; set; }
     [Export] public Node2D CollisionNode { get; set; }
-    
-    // Cached input values to avoid multiple calls
     private Vector2 inputDirection;
     private bool jumpPressed;
     private bool jumpReleased;
-    
-    // Physics state cache
     private bool onFloor;
     private bool onWall;
     private Vector2 gravity;
@@ -54,34 +35,25 @@ public partial class PlayerMovement : CharacterBody2D
     {
         float deltaFloat = (float)delta;
         
-        // Cache frequently used values
         CacheInputAndPhysicsState();
         
         Vector2 velocity = Velocity;
         
-        // Update all timers in one pass
         UpdateTimers(deltaFloat);
         
-        // Update coyote times
         UpdateCoyoteTime();
         UpdateWallCoyoteTime();
         
-        // Apply gravity
         ApplyGravity(ref velocity, deltaFloat);
         
-        // Handle wall mechanics
         HandleWallSlide(ref velocity, deltaFloat);
         
-        // Handle jumping
         HandleJumping(ref velocity);
         
-        // Handle horizontal movement
         HandleHorizontalMovement(ref velocity);
         
-        // Handle visual flipping (only once, not duplicated)
         HandleVisualFlipping();
         
-        // Handle state transitions
         HandleStateTransitions(velocity);
         
         Velocity = velocity;
@@ -157,10 +129,9 @@ public partial class PlayerMovement : CharacterBody2D
     {
         if (onWall && !onFloor)
         {
-            velocity += gravity * 0.5f * delta; // Reduced gravity for wall slide
+            velocity += gravity * 0.5f * delta;
             stateMachine?.TransitionTo("WallSlide");
             
-            // Handle wall slide visual flipping
             if (inputDirection.X != 0)
             {
                 FlipVisuals(inputDirection.X);
@@ -171,18 +142,15 @@ public partial class PlayerMovement : CharacterBody2D
     
     private void HandleJumping(ref Vector2 velocity)
     {
-        // Wall jump takes priority
         if (CanWallJump() && jumpPressed)
         {
             PerformWallJump(ref velocity);
         }
-        // Regular jump
         else if (CanRegularJump() && jumpPressed)
         {
             PerformRegularJump(ref velocity);
         }
         
-        // Variable jump height
         if (isJumping && jumpReleased && velocity.Y < minJumpVelocity)
         {
             velocity.Y *= jumpCutMultiplier;
@@ -304,3 +272,4 @@ public partial class PlayerMovement : CharacterBody2D
         wallJumpDirection = 0;
     }
 }
+

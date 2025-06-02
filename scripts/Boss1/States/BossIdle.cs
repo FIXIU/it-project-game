@@ -24,40 +24,42 @@ public partial class BossIdle : State
 
         idleTime += (float)delta;
 
-        // Check if player is detected
         if (boss.CanSeePlayer())
         {
             GD.Print("Player detected, transitioning to attack or walk state.");
             float distanceToPlayer = boss.GetDistanceToPlayer();
 
-            // Use the new raycast-based attack detection
             if (distanceToPlayer <= boss.AttackRange && boss.CanAttackPlayer())
             {
-                // Choose random attack
-                var attacks = new string[] { "Attack", "SpinAttack" };
-                string randomAttack = attacks[GD.RandRange(0, attacks.Length - 1)];
-                fsm?.TransitionTo(randomAttack);
+                if (GD.Randf() > 0.7f)
+                {
+                    fsm?.TransitionTo("SpinAttack");
+                }
+                else
+                {
+                    fsm?.TransitionTo("Attack");
+                }
             }
-            else if (distanceToPlayer > boss.AttackRange)
+            else if (distanceToPlayer > boss.AttackRange * 2.0f && GD.Randf() > 0.7f)
             {
-                // Move towards player
+                fsm?.TransitionTo("Leap");
+            }
+            else
+            {
                 fsm?.TransitionTo("Walk");
             }
         }
-
-        // Random behavior when idle for too long
-        if (idleTime >= maxIdleTime && !boss.PlayerDetected)
+        else if (idleTime >= maxIdleTime)
         {
-            // Random movement or taunt
-            if (GD.Randf() > 0.5f)
+            if (GD.Randf() > 0.8f)
+            {
+                fsm?.TransitionTo("Taunt");
+            }
+            else
             {
                 fsm?.TransitionTo("Walk");
             }
         }
-    }
-
-    public override void Exit()
-    {
-        // Clean up if needed
     }
 }
+
