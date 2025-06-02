@@ -7,6 +7,5 @@ public partial class Idle : State
 	{
 		var animationPlayer = GetNode<AnimationPlayer>("../../PlayerAnimator/AnimationPlayer");
 		animationPlayer.Play("Idle");
-		GD.Print($"Idle State: Playing 'Idle'. Current animation: {animationPlayer.CurrentAnimation}");
 	}
 }

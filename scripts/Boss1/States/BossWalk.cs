@@ -12,7 +12,7 @@ public partial class BossWalk : State
     {
         boss = GetNode<Boss>("../..");
         var animationPlayer = GetNode<AnimationPlayer>("../../BossAnimator/AnimationPlayer");
-        animationPlayer.Play("spr_Walk_strip");
+        animationPlayer.Play("Walk");
 
         walkTime = 0.0f;
 
@@ -37,7 +37,8 @@ public partial class BossWalk : State
         if (boss.IsDead) return;
 
         walkTime += (float)delta;
-
+        
+        
         // Move towards target
         boss.Velocity = new Vector2(walkDirection.X * boss.Speed, boss.Velocity.Y);
 

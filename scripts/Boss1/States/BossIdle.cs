@@ -25,6 +25,7 @@ public partial class BossIdle : State
         // Check if player is detected
         if (boss.CanSeePlayer())
         {
+            GD.Print("Player detected, transitioning to attack or walk state.");
             float distanceToPlayer = boss.GetDistanceToPlayer();
 
             if (distanceToPlayer <= boss.AttackRange && boss.PlayerInRange && boss.CanAttack)

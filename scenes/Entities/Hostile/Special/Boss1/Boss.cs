@@ -29,7 +29,7 @@ public partial class Boss : CharacterBody2D
     public bool IsAttacking = false;
     public bool IsDead = false;
     public bool PlayerInRange = false;
-    public bool PlayerDetected = false;
+    public bool PlayerDetected = true;
 
     // Movement variables
     public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -39,7 +39,7 @@ public partial class Boss : CharacterBody2D
     public override void _Ready()
     {
         // Get references
-        StateMachine = GetNode<StateMachine>("StateMachine");
+        StateMachine = GetNode<StateMachine>("FSM");
         AnimationPlayer = GetNode<AnimationPlayer>("BossAnimator/AnimationPlayer");
         AttackArea = GetNode<Area2D>("AttackArea");
         DetectionArea = GetNode<Area2D>("DetectionArea");
@@ -63,8 +63,14 @@ public partial class Boss : CharacterBody2D
 
         // Start taunt timer
         TauntTimer.Start();
+        StateMachine.TransitionTo("Idle");
 
         GD.Print("Boss initialized successfully");
+    }
+    
+    public override void _Process(double delta)
+    {
+        StateMachine?.CurrentState.Update(delta);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -165,6 +171,7 @@ public partial class Boss : CharacterBody2D
 
     private void OnDetectionAreaBodyEntered(Node2D body)
     {
+        GD.Print("Player detected!");
         if (body.IsInGroup("player"))
         {
             PlayerDetected = true;
@@ -173,6 +180,7 @@ public partial class Boss : CharacterBody2D
 
     private void OnDetectionAreaBodyExited(Node2D body)
     {
+        GD.Print("Player undetected!");
         if (body.IsInGroup("player"))
         {
             PlayerDetected = false;

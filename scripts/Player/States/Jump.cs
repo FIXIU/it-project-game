@@ -7,6 +7,5 @@ public partial class Jump : State
     {
         var animationPlayer = GetNode<AnimationPlayer>("../../PlayerAnimator/AnimationPlayer");
         animationPlayer.Play("Jump");
-        GD.Print($"Jump State: Playing 'Jump'. Current animation: {animationPlayer.CurrentAnimation}");
     }
 }

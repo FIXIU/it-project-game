@@ -8,7 +8,6 @@ public partial class Fall : State
 		// Adjust the path if your scene tree structure is different.
 		var animationPlayer = GetNode<AnimationPlayer>("../../PlayerAnimator/AnimationPlayer");
 		animationPlayer.Play("Fall"); // Assuming you have a "Fall" animation
-		GD.Print($"Fall State: Playing 'Fall'. Current animation: {animationPlayer.CurrentAnimation}");
 	}
 }
 
