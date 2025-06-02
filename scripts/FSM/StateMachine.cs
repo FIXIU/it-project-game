@@ -10,7 +10,7 @@ public partial class StateMachine : Node
     private State _currentState;
 
     public State CurrentState => _currentState;
-    
+
     public override void _Ready()
     {
         _states = new Dictionary<string, State>();
@@ -24,32 +24,51 @@ public partial class StateMachine : Node
                 state.Exit(); // reset all states
             }
         }
-        
-        _currentState = GetNode<State>(initialState);
-        _currentState.Enter();
+
+        if (initialState != null && GetNode(initialState) is State initialNodeState)
+        {
+            _currentState = initialNodeState;
+            _currentState.Enter();
+        }
+        else
+        {
+            GD.PrintErr($"Initial state not set or not found for StateMachine: {GetPath()}");
+        }
     }
-    
+
     public override void _Process(double delta)
     {
-        _currentState.Update((float)delta);
+        if (_currentState != null)
+        {
+            _currentState.Update((float)delta);
+        }
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        _currentState.PhysicsUpdate((float)delta);
+        if (_currentState != null)
+        {
+            _currentState.PhysicsUpdate((float)delta);
+        }
     }
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        _currentState.HandleInput(@event);
+        if (_currentState != null)
+        {
+            _currentState.HandleInput(@event);
+        }
     }
-    
+
     public void TransitionTo(string stateName)
     {
         if (!_states.ContainsKey(stateName) || _currentState == _states[stateName])
             return;
-        
-        _currentState.Exit();
+
+        if (_currentState != null)
+        {
+            _currentState.Exit();
+        }
         _currentState = _states[stateName];
         _currentState.Enter();
     }
