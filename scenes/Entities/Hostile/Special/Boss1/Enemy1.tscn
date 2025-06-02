@@ -1,21 +1,24 @@
-[gd_scene load_steps=29 format=3 uid="uid://bvjno4a3p0no5"]
+[gd_scene load_steps=34 format=3 uid="uid://bvjno4a3p0no5"]
 
-[ext_resource type="Script" uid="uid://cd4hhi537k81f" path="res://scenes/Entities/Hostile/Special/Boss1/Enemy1.cs" id="1_lsiai"]
+[ext_resource type="Script" uid="uid://cd4hhi537k81f" path="res://scenes/Entities/Hostile/Special/Boss1/Boss.cs" id="1_lsiai"]
 [ext_resource type="Texture2D" uid="uid://vfe06ky0gmwr" path="res://assets/enemy/spr_Idle_strip.png" id="1_lym4s"]
 [ext_resource type="Texture2D" uid="uid://bltydygitw0nb" path="res://assets/enemy/spr_Attack_strip.png" id="2_0eafm"]
 [ext_resource type="Script" uid="uid://dtp5hsbc64ydp" path="res://scripts/FSM/StateMachine.cs" id="2_xrs0q"]
-[ext_resource type="Script" uid="uid://f8fg0luofuvd" path="res://scripts/Player/States/Idle.cs" id="3_0eafm"]
 [ext_resource type="Texture2D" uid="uid://dljixw6ma0yt7" path="res://assets/enemy/spr_Jump_strip.png" id="3_2fjnr"]
-[ext_resource type="Script" uid="uid://crj5alhilvc5a" path="res://scripts/Player/States/Run.cs" id="4_2fjnr"]
 [ext_resource type="Texture2D" uid="uid://cbubcvtfajxau" path="res://assets/enemy/spr_Death_strip.png" id="4_62kot"]
-[ext_resource type="Script" uid="uid://bpuhccda73sjj" path="res://scripts/Player/States/Jump.cs" id="5_30l5e"]
 [ext_resource type="Texture2D" uid="uid://cf8r5q0uyx824" path="res://assets/enemy/spr_Dash_strip.png" id="5_uanfv"]
-[ext_resource type="Script" uid="uid://jff0viq2k201" path="res://scripts/Player/States/Fall.cs" id="6_62kot"]
 [ext_resource type="Texture2D" uid="uid://c8arp7v5s3hex" path="res://assets/enemy/spr_Leap_strip.png" id="6_pf26h"]
 [ext_resource type="Script" uid="uid://ecmt5vqxvk0n" path="res://scenes/Hurtbox/Hurtbox.cs" id="7_pf26h"]
-[ext_resource type="Script" uid="uid://qagtxgvipnl1" path="res://scripts/Player/States/WallSlide.cs" id="7_uanfv"]
 [ext_resource type="Script" uid="uid://ctmv1ie2a8jln" path="res://scenes/Hitbox/Hitbox.cs" id="8_44cqv"]
-[ext_resource type="Script" uid="uid://d2cvub40aupy6" path="res://scripts/Player/States/Attack.cs" id="8_pf26h"]
+[ext_resource type="Script" uid="uid://bum6qd6ny821" path="res://scripts/Boss1/States/BossIdle.cs" id="11_nbcnt"]
+[ext_resource type="Script" uid="uid://bu6bymd6irb7m" path="res://scripts/Boss1/States/BossWalk.cs" id="12_sbb5b"]
+[ext_resource type="Script" uid="uid://b62ciwmxyu8jf" path="res://scripts/Boss1/States/BossJump.cs" id="13_foklg"]
+[ext_resource type="Script" uid="uid://bgqlja073f4bv" path="res://scripts/Boss1/States/BossDeath.cs" id="14_ptst5"]
+[ext_resource type="Script" uid="uid://c7n85esf7p1hd" path="res://scripts/Boss1/States/BossDash.cs" id="15_20i07"]
+[ext_resource type="Script" uid="uid://w8s6hewsnpi3" path="res://scripts/Boss1/States/BossAttack.cs" id="16_c3uix"]
+[ext_resource type="Script" uid="uid://cjcj2mvic1kjy" path="res://scripts/Boss1/States/BossSpinAttack.cs" id="17_wqjj2"]
+[ext_resource type="Script" uid="uid://dvvdgllxhfhwy" path="res://scripts/Boss1/States/BossTaunt.cs" id="18_gwv3i"]
+[ext_resource type="Script" uid="uid://de7cibf8gdtyo" path="res://scripts/Boss1/States/BossLeap.cs" id="19_yggyu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44cqv"]
 size = Vector2(21, 32)
@@ -1433,11 +1436,15 @@ _data = {
 &"RESET": SubResource("Animation_b08l3")
 }
 
-[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("VisualsNode")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r8m1b"]
+size = Vector2(393, 206)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nbcnt"]
+size = Vector2(112, 76)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 0
 script = ExtResource("1_lsiai")
-StateMachinePath = NodePath("FSM")
-VisualsNode = NodePath("BossAnimator/Sprite2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -16)
@@ -1493,19 +1500,46 @@ script = ExtResource("2_xrs0q")
 initialState = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="FSM"]
-script = ExtResource("3_0eafm")
+script = ExtResource("11_nbcnt")
 
 [node name="Walk" type="Node" parent="FSM"]
-script = ExtResource("4_2fjnr")
+script = ExtResource("12_sbb5b")
 
 [node name="Jump" type="Node" parent="FSM"]
-script = ExtResource("5_30l5e")
+script = ExtResource("13_foklg")
 
 [node name="Death" type="Node" parent="FSM"]
-script = ExtResource("6_62kot")
+script = ExtResource("14_ptst5")
 
 [node name="Dash" type="Node" parent="FSM"]
-script = ExtResource("7_uanfv")
+script = ExtResource("15_20i07")
 
 [node name="Attack" type="Node" parent="FSM"]
-script = ExtResource("8_pf26h")
+script = ExtResource("16_c3uix")
+
+[node name="SpinAttack" type="Node" parent="FSM"]
+script = ExtResource("17_wqjj2")
+
+[node name="Taunt" type="Node" parent="FSM"]
+script = ExtResource("18_gwv3i")
+
+[node name="Leap" type="Node" parent="FSM"]
+script = ExtResource("19_yggyu")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(1, -76)
+shape = SubResource("RectangleShape2D_r8m1b")
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(1, -30)
+shape = SubResource("RectangleShape2D_nbcnt")
+
+[node name="TauntTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+wait_time = 3.0

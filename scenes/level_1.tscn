@@ -144,5 +144,5 @@ position = Vector2(77, 3)
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("4_5xbjy")]
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("5_4nkto")]
-position = Vector2(249, -77)
+position = Vector2(859, -399)
 scale = Vector2(2, 2)

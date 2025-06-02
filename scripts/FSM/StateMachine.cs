@@ -8,6 +8,8 @@ public partial class StateMachine : Node
 
     private Dictionary<string, State> _states;
     private State _currentState;
+
+    public State CurrentState => _currentState;
     
     public override void _Ready()
     {
