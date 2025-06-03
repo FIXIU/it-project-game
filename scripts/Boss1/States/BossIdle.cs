@@ -26,22 +26,25 @@ public partial class BossIdle : State
 
         if (boss.CanSeePlayer())
         {
-            GD.Print("Player detected, transitioning to attack or walk state.");
             float distanceToPlayer = boss.GetDistanceToPlayer();
-
-            if (distanceToPlayer <= boss.AttackRange && boss.CanAttackPlayer())
+            GD.Print(distanceToPlayer + " : " + boss.AttackRange);
+            if (distanceToPlayer <= boss.AttackRange)
             {
-                if (GD.Randf() > 0.7f)
+                fsm?.ListAllStates();
+                if (GD.Randf() > 0.6f)
                 {
+                    GD.Print("Spin Attack");
                     fsm?.TransitionTo("SpinAttack");
                 }
                 else
                 {
+                    GD.Print("Normal Attack");
                     fsm?.TransitionTo("Attack");
                 }
             }
             else if (distanceToPlayer > boss.AttackRange * 2.0f && GD.Randf() > 0.7f)
             {
+                GD.Print("Leap Attack");
                 fsm?.TransitionTo("Leap");
             }
             else

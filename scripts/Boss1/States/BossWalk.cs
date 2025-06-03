@@ -31,14 +31,11 @@ public partial class BossWalk : State
         if (boss.CanSeePlayer())
         {
             float distanceToPlayer = boss.GetDistanceToPlayer();
-            if (distanceToPlayer <= boss.AttackRange && boss.CanAttackPlayer())
+            if (distanceToPlayer <= boss.AttackRange)
             {
                 boss.Velocity = new Vector2(0, boss.Velocity.Y);
-                if (GD.Randf() > 0.7f && distanceToPlayer > boss.AttackRange * 0.5f)
-                {
-                    fsm?.TransitionTo("Dash");
-                }
-                else if (GD.Randf() > 0.5f)
+                
+                if (GD.Randf() > 0.5f)
                 {
                     fsm?.TransitionTo("SpinAttack");
                 }
@@ -47,10 +44,12 @@ public partial class BossWalk : State
                     fsm?.TransitionTo("Attack");
                 }
             }
-            else if (distanceToPlayer <= boss.AttackRange * 0.8f)
+            else if (GD.Randf() > 0.7f && distanceToPlayer > boss.AttackRange * 1.5f)
             {
-                fsm?.TransitionTo("Idle");
+                GD.Print("Tried to Dash");
+                fsm?.TransitionTo("Dash");
             }
+            
         }
         if (walkTime >= maxWalkTime || (!boss.CanSeePlayer() && walkTime > 1.0f))
         {
@@ -58,9 +57,9 @@ public partial class BossWalk : State
         }
     }
 
-    public override void Exit()
-    {
-        boss.Velocity = new Vector2(0, boss.Velocity.Y);
-    }
+    // public override void Exit()
+    // {
+    //     boss.Velocity = new Vector2(0, boss.Velocity.Y);
+    // }
 }
 

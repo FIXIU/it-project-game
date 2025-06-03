@@ -11,20 +11,20 @@ public partial class BossJump : State
     {
         boss = GetNode<Boss>("../..");
         var animationPlayer = GetNode<AnimationPlayer>("../../BossAnimator/AnimationPlayer");
-        animationPlayer.Play("spr_Jump_strip");
+        animationPlayer.Play("Jump");
 
         hasJumped = false;
         jumpTimer = 0.0f;
 
         if (boss.IsOnFloor())
         {
-            boss.Velocity = new Vector2(boss.Velocity.X, boss.JumpVelocity);
+            animationPlayer.Play("Jump");
             hasJumped = true;
 
             if (boss.CanSeePlayer())
             {
                 Vector2 direction = boss.GetDirectionToPlayer();
-                boss.Velocity = new Vector2(direction.X * boss.Speed * 0.7f, boss.Velocity.Y);
+                
             }
         }
 

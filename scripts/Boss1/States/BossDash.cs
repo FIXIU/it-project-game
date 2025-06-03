@@ -20,7 +20,7 @@ public partial class BossDash : State
     {
         if (boss.IsDead) return;
         dashTimer += (float)delta;
-        if (!hasDashed && dashTimer >= 0.2f)
+        if (!hasDashed && dashTimer >= 0.25f)
         {
             PerformDash();
             hasDashed = true;
@@ -33,11 +33,6 @@ public partial class BossDash : State
     private void PerformDash()
     {
         Vector2 dashDirection = boss.FacingRight ? Vector2.Right : Vector2.Left;
-        boss.Velocity = new Vector2(dashDirection.X * boss.DashSpeed, boss.Velocity.Y);
-        if (boss.PlayerInRange && boss.Player != null && boss.Player.HasMethod("TakeDamage"))
-        {
-            boss.Player.Call("TakeDamage", 20.0f);
-            GD.Print("Boss Dash dealt 20 damage to player!");
-        }
+        boss.GlobalPosition += new Vector2(dashDirection.X * 58, 0);
     }
 }

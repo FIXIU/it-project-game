@@ -18,8 +18,7 @@ public partial class Boss : CharacterBody2D
 
     [Signal] public delegate void HealthChangedEventHandler(float health);
     [Signal] public delegate void BossDefeatedEventHandler();
-
-    public StateMachine StateMachine;
+    
     public AnimationPlayer AnimationPlayer;
     public Node2D Player;
     public Timer AttackCooldownTimer;
@@ -38,10 +37,11 @@ public partial class Boss : CharacterBody2D
     public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     public Vector2 TargetPosition;
     public bool FacingRight = true;
+    
+    [Export] public StateMachine StateMachine;
 
     public override void _Ready()
     {
-        StateMachine = GetNode<StateMachine>("FSM");
         AnimationPlayer = GetNode<AnimationPlayer>("BossAnimator/AnimationPlayer");
         AttackCooldownTimer = GetNode<Timer>("AttackCooldownTimer");
         TauntTimer = GetNode<Timer>("TauntTimer");
@@ -76,7 +76,7 @@ public partial class Boss : CharacterBody2D
     
     public override void _Process(double delta)
     {
-        StateMachine?.CurrentState.Update(delta);
+        StateMachine?.CurrentState?.Update(delta);
         
         UpdatePlayerDetection();
         

@@ -9,6 +9,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
+layout_mode = 0
 offset_right = 244.0
 offset_bottom = 32.0
 

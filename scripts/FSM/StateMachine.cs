@@ -13,12 +13,18 @@ public partial class StateMachine : Node
         _states = new Dictionary<string, State>();
         foreach (Node node in GetChildren())
         {
+            GD.Print(node.Name);
             if (node is State state)
             {
+                GD.Print(state.Name + " is a State");
                 _states[node.Name] = state;
                 state.fsm = this;
+                GD.Print("Trying to ready " + state.Name);
                 state.Ready();
+                GD.Print("Trying to exit " + state.Name);
                 state.Exit();
+                GD.Print("Exitted " + state.Name);
+                GD.Print(state.Name);
             }
         }
         if (initialState != null && GetNode(initialState) is State initialNodeState)
@@ -29,6 +35,11 @@ public partial class StateMachine : Node
         else
         {
             GD.PrintErr($"Initial state not set or not found for StateMachine: {GetPath()}");
+        }
+
+        foreach (var state in _states)
+        {
+            GD.Print(state);
         }
     }
     public override void _Process(double delta)
@@ -62,6 +73,15 @@ public partial class StateMachine : Node
         }
         _currentState = _states[stateName];
         _currentState.Enter();
+    }
+    
+    public void ListAllStates()
+    {
+        GD.Print("Current States in StateMachine:");
+        foreach (var state in _states)
+        {
+            GD.Print(state);
+        }
     }
 }
 

@@ -778,7 +778,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(6, -28)]
+"values": [Vector2(31, -28)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -787,10 +787,10 @@ tracks/5/path = NodePath("../CollisionShape2D:shape:size")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1.625),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(21, 32)]
+"values": [Vector2(21, 32), Vector2(21, 32)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -799,10 +799,10 @@ tracks/6/path = NodePath("../CollisionShape2D:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1.625),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0.5, -16)]
+"values": [Vector2(0.5, -16), Vector2(92, -16)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -811,7 +811,7 @@ tracks/7/path = NodePath("../Hammer/CollisionShape2D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.95634, 1.1875),
+"times": PackedFloat32Array(0, 0.9375, 1.1875),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, false, true]
@@ -823,10 +823,10 @@ tracks/8/path = NodePath("../Hammer/CollisionShape2D:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.96567),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.9375, 1.125),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(-0.069767, -46.8614), Vector2(60.1472, 65.7215)]
+"values": [Vector2(-0.069767, -46.8614), Vector2(76.8217, 85.6704), Vector2(76.8217, 85.6704)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -875,6 +875,42 @@ tracks/12/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("../Hammer/CollisionShape2D:shape:radius")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0.9375),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [5.0901]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("../Hammer/CollisionShape2D:shape:height")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0.9375),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [10.1802]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("..:position")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(-12, 24), Vector2(-16, 31), Vector2(-6, 32), Vector2(-42, 37), Vector2(-48, 40), Vector2(-60, 38), Vector2(-72, 24), Vector2(-78, 16), Vector2(-92, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_kay57"]
@@ -939,7 +975,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(6, -28)]
+"values": [Vector2(51, -44)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -948,10 +984,10 @@ tracks/5/path = NodePath("../CollisionShape2D:shape:size")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.522488),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(21, 32), Vector2(17, 29)]
+"values": [Vector2(21, 32)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -960,10 +996,10 @@ tracks/6/path = NodePath("../CollisionShape2D:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.522488),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.333333, 1.625),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(-45, 0), Vector2(-46.5, -55.5)]
+"values": [Vector2(0, -16), Vector2(0, -16), Vector2(109, -16)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -996,10 +1032,10 @@ tracks/9/path = NodePath("../Hammer/CollisionShape2D:disabled")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.676436, 1.04167),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.676436, 0.791667, 1.04167),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [true, false, true]
+"values": [true, false, false, true]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -1008,10 +1044,10 @@ tracks/10/path = NodePath("../Hammer/CollisionShape2D:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0.75, 0.791667, 0.807058, 0.833333, 1.04167),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.708333, 0.75, 0.791667, 0.807058, 0.833333, 1.04167),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(39.9212, -17.7285), Vector2(44.2051, 21.7005), Vector2(44.2051, 21.7005), Vector2(35.0444, 60.6374), Vector2(35.0444, 60.6374)]
+"values": [Vector2(72.1696, -29.0438), Vector2(39.9212, -17.7285), Vector2(85.3411, 45.9662), Vector2(44.2051, 21.7005), Vector2(74.7718, 84.7772), Vector2(75.4132, 85.5446)]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
@@ -1071,7 +1107,7 @@ tracks/15/keys = {
 "times": PackedFloat32Array(1.08333, 1.15227),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(70, 5), Vector2(75, 10)]
+"values": [Vector2(114, -12), Vector2(75, 10)]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
@@ -1096,6 +1132,18 @@ tracks/17/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("..:position")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
 }
 
 [sub_resource type="Animation" id="Animation_b08l3"]
@@ -1424,6 +1472,18 @@ tracks/26/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("..:position")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_foklg"]
 resource_name = "Walk"
@@ -1629,9 +1689,12 @@ size = Vector2(393, 206)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nbcnt"]
 size = Vector2(112, 76)
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("StateMachine")]
 collision_layer = 0
 script = ExtResource("1_lsiai")
+AttackRange = 100.0
+AggroRange = 300.0
+StateMachine = NodePath("FSM")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -16)
@@ -1687,32 +1750,32 @@ debug_color = Color(1, 0, 0, 0.419608)
 script = ExtResource("2_xrs0q")
 initialState = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="FSM"]
-script = ExtResource("11_nbcnt")
-
-[node name="Walk" type="Node" parent="FSM"]
-script = ExtResource("12_sbb5b")
-
-[node name="Jump" type="Node" parent="FSM"]
-script = ExtResource("13_foklg")
-
 [node name="Death" type="Node" parent="FSM"]
 script = ExtResource("14_ptst5")
 
 [node name="Dash" type="Node" parent="FSM"]
 script = ExtResource("15_20i07")
 
-[node name="Attack" type="Node" parent="FSM"]
-script = ExtResource("16_c3uix")
-
 [node name="SpinAttack" type="Node" parent="FSM"]
 script = ExtResource("17_wqjj2")
+
+[node name="Jump" type="Node" parent="FSM"]
+script = ExtResource("13_foklg")
+
+[node name="Leap" type="Node" parent="FSM"]
+script = ExtResource("19_yggyu")
 
 [node name="Taunt" type="Node" parent="FSM"]
 script = ExtResource("18_gwv3i")
 
-[node name="Leap" type="Node" parent="FSM"]
-script = ExtResource("19_yggyu")
+[node name="Idle" type="Node" parent="FSM"]
+script = ExtResource("11_nbcnt")
+
+[node name="Attack" type="Node" parent="FSM"]
+script = ExtResource("16_c3uix")
+
+[node name="Walk" type="Node" parent="FSM"]
+script = ExtResource("12_sbb5b")
 
 [node name="DetectionArea" type="Area2D" parent="."]
 visible = false
@@ -1735,6 +1798,9 @@ wait_time = 5.0
 wait_time = 3.0
 
 [node name="LineOfSightRay" type="RayCast2D" parent="."]
+
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 4.0
 
 [connection signal="body_entered" from="DetectionArea" to="." method="OnDetectionAreaBodyEntered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="OnDetectionAreaBodyExited"]

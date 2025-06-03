@@ -54,9 +54,9 @@ public partial class BossAttack : State
         }
     }
 
-    public override void Exit()
-    {
-        boss.IsAttacking = false;
-    }
+    // public override void Exit()
+    // {
+    //     boss.IsAttacking = false;
+    // }
 }
 
