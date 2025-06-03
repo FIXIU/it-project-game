@@ -33,6 +33,6 @@ public partial class BossDash : State
     private void PerformDash()
     {
         Vector2 dashDirection = boss.FacingRight ? Vector2.Right : Vector2.Left;
-        boss.GlobalPosition += new Vector2(dashDirection.X * 58, 0);
+        boss.GlobalPosition += new Vector2(dashDirection.X * 58, 0); // TODO: Fix this bullshit
     }
 }

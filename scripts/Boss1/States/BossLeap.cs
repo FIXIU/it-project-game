@@ -36,11 +36,10 @@ public partial class BossLeap : State
         {
             animationPlayer.Play("Leap");
             hasLeaped = true;
-        
-            // Execute teleport regardless of other conditions
+            
             GD.Print($"Boss leaping towards target");
             GD.Print("Before: " + boss.GlobalPosition);
-            var dir = boss.FacingRight ? Vector2.Right : Vector2.Left;
+            var dir = boss.FacingRight ? Vector2.Right : Vector2.Left; // TODO: Fix this bullshit
             boss.GlobalPosition += dir * 108;
             GD.Print("After: " + boss.GlobalPosition);
         }
