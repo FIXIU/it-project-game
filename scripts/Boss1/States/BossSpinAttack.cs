@@ -4,8 +4,9 @@ public partial class BossSpinAttack : State
 {
     private Boss boss;
     private float spinTimer = 0.0f;
-    private float spinDuration = 1.2f;
+    private float spinDuration = 3.2f;
     private bool hasHit = false;
+    private Vector2 walkDirection;
 
     public override void Enter()
     {
@@ -14,28 +15,26 @@ public partial class BossSpinAttack : State
         animationPlayer.Play("SpinAttack");
         spinTimer = 0.0f;
         hasHit = false;
-        GD.Print("Boss SpinAttack State: Playing 'SpinAttack'");
+        if (boss.Player != null)
+        {
+            walkDirection = boss.GetDirectionToPlayer();
+        }
+        else
+        {
+            walkDirection = new Vector2(GD.Randf() > 0.5f ? 1 : -1, 0);
+        }
     }
     public override void Update(double delta)
     {
         if (boss.IsDead) return;
         spinTimer += (float)delta;
-        if (!hasHit && spinTimer >= spinDuration * 0.5f)
+        if (spinTimer >= 1.0f)
         {
-            PerformSpinAttack();
-            hasHit = true;
+            boss.Velocity = new Vector2(walkDirection.X * 50, boss.Velocity.Y);
         }
         if (spinTimer >= spinDuration)
         {
             fsm?.TransitionTo("Idle");
-        }
-    }
-    private void PerformSpinAttack()
-    {
-        if (boss.PlayerInRange && boss.Player != null && boss.Player.HasMethod("TakeDamage"))
-        {
-            boss.Player.Call("TakeDamage", 40.0f);
-            GD.Print("Boss SpinAttack dealt 40 damage to player!");
         }
     }
 }

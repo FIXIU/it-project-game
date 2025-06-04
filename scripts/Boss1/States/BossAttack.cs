@@ -4,7 +4,7 @@ public partial class BossAttack : State
 {
     private Boss boss;
     private bool attackHitRegistered = false;
-    private float attackDuration = 1.0f;
+    private float attackDuration = 4f;
     private float attackTimer = 0.0f;
 
     public override void Enter()
@@ -25,7 +25,6 @@ public partial class BossAttack : State
         attackTimer += (float)delta;
         if (!attackHitRegistered && attackTimer >= attackDuration * 0.5f)
         {
-            PerformAttack();
             attackHitRegistered = true;
         }
         if (attackTimer >= attackDuration)
@@ -38,18 +37,6 @@ public partial class BossAttack : State
             else
             {
                 fsm?.TransitionTo("Idle");
-            }
-        }
-    }
-
-    private void PerformAttack()
-    {
-        if (boss.CanAttackPlayer() && boss.Player != null)
-        {
-            if (boss.Player.HasMethod("TakeDamage"))
-            {
-                boss.Player.Call("TakeDamage", 25.0f);
-                GD.Print("Boss dealt 25 damage to player!");
             }
         }
     }

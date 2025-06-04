@@ -55,3 +55,10 @@ scale_amount_max = 1.25
 color_ramp = SubResource("Gradient_y4dwb")
 hue_variation_min = -0.1
 hue_variation_max = 0.1
+
+[node name="SaveTimer" type="Timer" parent="."]
+wait_time = 1.2
+one_shot = true
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="OnBodyEntered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="OnBodyExited"]

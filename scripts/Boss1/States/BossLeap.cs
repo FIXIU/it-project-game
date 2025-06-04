@@ -6,12 +6,17 @@ public partial class BossLeap : State
     private Boss boss;
     private bool hasLeaped = false;
     private float leapTimer = 0.0f;
-    private float maxLeapTime = 3.0f;
+    private float leapDuration = 1.2f; // Duration of the leap in seconds
+    private float maxLeapTime = 3.0f;  // Total time in this state
+    private Vector2 leapStartPosition;
+    private Vector2 leapEndPosition;
     private Vector2 leapTarget;
     private bool targetSet = false;
-
-    public override void Enter()
+    private Godot.Timer leapTimerNode;
+    
+     public override void Enter()
     {
+        leapTimerNode = GetNode<Godot.Timer>("../../LeapTimer");
         boss = GetNode<Boss>("../..");
         var animationPlayer = GetNode<AnimationPlayer>("../../BossAnimator/AnimationPlayer");
         animationPlayer.Play("Leap");
@@ -24,26 +29,33 @@ public partial class BossLeap : State
         {
             leapTarget = boss.Player.GlobalPosition;
         }
-        GD.Print($"Boss Leap State: Playing 'spr_Leap_strip'");
     }
-
+    
     public override void Update(double delta)
     {
+        boss = GetNode<Boss>("../..");
         var animationPlayer = GetNode<AnimationPlayer>("../../BossAnimator/AnimationPlayer");
         if (boss.IsDead) return;
         leapTimer += (float)delta;
-        if (!hasLeaped && leapTimer >= 0.3f)
+        
+        if (!hasLeaped)
         {
             animationPlayer.Play("Leap");
             hasLeaped = true;
-            
-            GD.Print($"Boss leaping towards target");
-            GD.Print("Before: " + boss.GlobalPosition);
-            var dir = boss.FacingRight ? Vector2.Right : Vector2.Left; // TODO: Fix this bullshit
-            boss.GlobalPosition += dir * 108;
-            GD.Print("After: " + boss.GlobalPosition);
+            leapTimerNode.Start();
         }
+        if (leapTimer >= 1.2f && leapTimer <= 1.67)
+        {
+            Vector2 dashDirection = boss.FacingRight ? Vector2.Right : Vector2.Left;
     
+            // Set a high velocity for the dash
+            float dashSpeed = 200.0f;
+            boss.Velocity = new Vector2(dashDirection.X * dashSpeed, boss.Velocity.Y);
+        }
+        else
+        {
+            boss.Velocity = new Vector2(0, boss.Velocity.Y);
+        }
         if (hasLeaped && leapTimer > 3.0f)
         {
             fsm?.TransitionTo("Idle");

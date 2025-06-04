@@ -20,11 +20,13 @@ public partial class DeathZone : Node2D
 
     private void OnBodyEntered(Node2D body)
     {
+        GD.Print("Body entered DeathZone: " + body.Name);
         if (body.IsInGroup("player"))
         {
+            GD.Print($"Player entered DeathZone: {body.Name}");
             if (body.HasMethod("TakeDamage"))
             {
-                body.Call("TakeDamage", float.MaxValue);
+                body.Call("TakeDamage", 100);
                 GD.Print("Player entered DeathZone and took lethal damage.");
             }
             else

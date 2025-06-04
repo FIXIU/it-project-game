@@ -90,7 +90,7 @@ public partial class Boss : CharacterBody2D
             Velocity = new Vector2(Velocity.X, Velocity.Y + Gravity * (float)delta);
         }
 
-        if (Player != null && !IsDead)
+        if (Player != null && !IsDead && (StateMachine?.CurrentState?.Name == "Idle" || StateMachine?.CurrentState?.Name == "Walk"))
         {
             UpdateFacingDirection();
         }

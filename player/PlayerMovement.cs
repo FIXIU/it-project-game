@@ -3,8 +3,8 @@ using System;
 
 public partial class PlayerMovement : CharacterBody2D
 {
-    public const float Speed = 220.0f;
-    public const float JumpVelocity = -400.0f;
+    public const float Speed = 300.0f;
+    public const float JumpVelocity = -450.0f;
     [Export] private float jumpCutMultiplier = 0.4f;
     [Export] private float minJumpVelocity = -150.0f;
     [Export] private float wallJumpBoostTime = 0.3f;
@@ -30,12 +30,24 @@ public partial class PlayerMovement : CharacterBody2D
     private bool onFloor;
     private bool onWall;
     private Vector2 gravity;
+    
+    private Timer attackTimer;
+    private bool attackPressed;
+    
+    private bool canAttack = true;
 
     public override void _PhysicsProcess(double delta)
     {
         float deltaFloat = (float)delta;
         
+        attackTimer = GetNode<Timer>("AttackTimer");
+        
         CacheInputAndPhysicsState();
+        if (attackPressed && canAttack)
+        {
+            GD.Print("Attack pressed");
+            PerformAttack();
+        }
         
         Vector2 velocity = Velocity;
         
@@ -58,6 +70,7 @@ public partial class PlayerMovement : CharacterBody2D
         
         Velocity = velocity;
         MoveAndSlide();
+        
     }
     
     private void CacheInputAndPhysicsState()
@@ -65,6 +78,7 @@ public partial class PlayerMovement : CharacterBody2D
         inputDirection = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
         jumpPressed = Input.IsActionJustPressed("ui_accept");
         jumpReleased = Input.IsActionJustReleased("ui_accept");
+        attackPressed = Input.IsActionJustPressed("attack");
         
         onFloor = IsOnFloor();
         onWall = IsOnWall();
@@ -270,6 +284,17 @@ public partial class PlayerMovement : CharacterBody2D
     {
         wallJumpForce = 0;
         wallJumpDirection = 0;
+    }
+    private void PerformAttack()
+    {
+        if (!canAttack) return;
+        
+        canAttack = false;
+        
+        // Transition to attack state
+        stateMachine?.TransitionTo("Attack");
+
+        attackTimer.Start();
     }
 }
 

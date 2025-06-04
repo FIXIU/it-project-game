@@ -14,8 +14,6 @@ public partial class BossIdle : State
 
         idleTime = 0.0f;
         boss.Velocity = new Vector2(0, boss.Velocity.Y);
-
-        GD.Print($"Boss Idle State: Playing 'Idle'");
     }
 
     public override void Update(double delta)
@@ -27,24 +25,19 @@ public partial class BossIdle : State
         if (boss.CanSeePlayer())
         {
             float distanceToPlayer = boss.GetDistanceToPlayer();
-            GD.Print(distanceToPlayer + " : " + boss.AttackRange);
             if (distanceToPlayer <= boss.AttackRange)
             {
-                fsm?.ListAllStates();
                 if (GD.Randf() > 0.6f)
                 {
-                    GD.Print("Spin Attack");
                     fsm?.TransitionTo("SpinAttack");
                 }
                 else
                 {
-                    GD.Print("Normal Attack");
                     fsm?.TransitionTo("Attack");
                 }
             }
             else if (distanceToPlayer > boss.AttackRange * 2.0f && GD.Randf() > 0.7f)
             {
-                GD.Print("Leap Attack");
                 fsm?.TransitionTo("Leap");
             }
             else

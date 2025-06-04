@@ -6,9 +6,11 @@ public partial class BossWalk : State
     private Vector2 walkDirection;
     private float walkTime = 0.0f;
     private float maxWalkTime = 3.0f;
+    private Timer dashTimer;
 
     public override void Enter()
     {
+        dashTimer = GetNode<Timer>("../../DashTimer");
         boss = GetNode<Boss>("../..");
         var animationPlayer = GetNode<AnimationPlayer>("../../BossAnimator/AnimationPlayer");
         animationPlayer.Play("Walk");
@@ -44,10 +46,14 @@ public partial class BossWalk : State
                     fsm?.TransitionTo("Attack");
                 }
             }
-            else if (GD.Randf() > 0.7f && distanceToPlayer > boss.AttackRange * 1.5f)
+            else if (GD.Randf() > 0.7f && distanceToPlayer > boss.AttackRange * 1.5f && GetNode<Timer>("../../DashTimer").TimeLeft == 0.0d)
             {
                 GD.Print("Tried to Dash");
                 fsm?.TransitionTo("Dash");
+            }
+            else if (distanceToPlayer > boss.AttackRange * 2.0f && GD.Randf() > 0.7f && GetNode<Timer>("../../LeapTimer").TimeLeft == 0.0d)
+            {
+                fsm?.TransitionTo("Leap");
             }
             
         }

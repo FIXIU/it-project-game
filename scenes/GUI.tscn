@@ -1,12 +1,16 @@
-[gd_scene format=3 uid="uid://b1f728ydutwaw"]
+[gd_scene load_steps=2 format=3 uid="uid://b1f728ydutwaw"]
 
-[node name="Gui" type="Control"]
+[ext_resource type="Script" uid="uid://dqa6tqqm26vrd" path="res://scripts/Gui.cs" id="1_jbthi"]
+
+[node name="Gui" type="Control" node_paths=PackedStringArray("_healthBar")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_jbthi")
+_healthBar = NodePath("NinePatchRect2/ProgressBar")
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
 layout_mode = 0
@@ -26,7 +30,7 @@ offset_bottom = 13.5
 grow_horizontal = 0
 grow_vertical = 2
 step = 1.0
-value = 40.0
+value = 100.0
 rounded = true
 
 [node name="Label" type="Label" parent="NinePatchRect2"]

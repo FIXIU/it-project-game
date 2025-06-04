@@ -5,20 +5,34 @@ public partial class Hurtbox : Area2D
 {
     public override void _Ready()
     {
-        var layersAndMasks = (LayersAndMasks) GetNode("/root/LayersAndMasks");
         CollisionLayer = 0;
-        CollisionMask = layersAndMasks.GetCollisionLayerByName("Hitbox");
-        Connect("area_entered", new Callable(this, nameof(OnAreaEntered)));
+        
+        // Add safety check to prevent null reference exception
+        var layersAndMasks = GetNode<LayersAndMasks>("/root/LayersAndMasks");
+        if (layersAndMasks != null)
+        {
+            CollisionMask = layersAndMasks.GetCollisionLayerByName("Hitbox");
+        }
+        else
+        {
+            GD.PrintErr("LayersAndMasks singleton not found! Make sure it's added as an Autoload in Project Settings.");
+            // Fallback to a default mask if needed
+            // CollisionMask = 2; // Assuming 2 is the hitbox layer
+        }
+        
+        AreaEntered += OnAreaEntered;
     }
 
-    private void OnAreaEntered(Hitbox hitbox)
+    private void OnAreaEntered(Area2D area)
     {
-        if(hitbox == null)
+        if(area is not Hitbox hitbox)
         {
             return;
         }
-        ITakeDamage ownerTakeDamage = (ITakeDamage)Owner;
-        ownerTakeDamage.TakeDamage(hitbox.Damage, hitbox.AttackFromVector);
+        
+        if(Owner is ITakeDamage ownerTakeDamage)
+        {
+            ownerTakeDamage.TakeDamage(hitbox.Damage, hitbox.AttackFromVector);
+        }
     }
 }
-
