@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5kbsq5tnm6lu"
-path="res://.godot/imported/specter_run-running.png-48ce8870dd133902ece0f1b224e25b10.ctex"
+uid="uid://1rtnmdsn3l5r"
+path="res://.godot/imported/clotheslineShorter2.png-157789be81eae2a6b53fb6c82bf1f0cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player/specter_run-running.png"
-dest_files=["res://.godot/imported/specter_run-running.png-48ce8870dd133902ece0f1b224e25b10.ctex"]
+source_file="res://assets/props/clotheslineShorter2.png"
+dest_files=["res://.godot/imported/clotheslineShorter2.png-157789be81eae2a6b53fb6c82bf1f0cf.ctex"]
 
 [params]
 
@@ -25,7 +25,7 @@ mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
-process/fix_alpha_border=false
+process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
