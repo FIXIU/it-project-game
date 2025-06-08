@@ -11,6 +11,17 @@ public partial class Player : PlayerMovement
         GD.Print($"Player took {damage} damage.");
         health -= damage;
         UpdateHealthBar();
+        if (health <= 0)
+        {
+            GD.Print("Player health is zero or below. Handling death...");
+            HandleDeath();
+        }
+    }
+
+    public void HandleDeath()
+    {
+        GD.Print("Player has died. Triggering death sequence...");
+        
     }
 
     public void UpdateHealthBar()
