@@ -4,14 +4,17 @@ using System;
 public partial class Player : PlayerMovement
 {
     [Export]
+    DeathScreen _deathScreen;
+    [Export]
     Gui gui;
     private int health = 100;
     public void TakeDamage(int damage)
     {
         GD.Print($"Player took {damage} damage.");
+        int tempHealth = health;
         health -= damage;
         UpdateHealthBar();
-        if (health <= 0)
+        if (tempHealth > 0 && health <= 0)
         {
             GD.Print("Player health is zero or below. Handling death...");
             HandleDeath();
@@ -21,7 +24,8 @@ public partial class Player : PlayerMovement
     public void HandleDeath()
     {
         GD.Print("Player has died. Triggering death sequence...");
-        
+        ProcessMode = ProcessModeEnum.Disabled;
+        _deathScreen.HandleDeathScreen();
     }
 
     public void UpdateHealthBar()

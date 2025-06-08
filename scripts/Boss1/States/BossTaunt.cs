@@ -10,13 +10,11 @@ public partial class BossTaunt : State
     {
         boss = GetNode<Boss>("../..");
         var animationPlayer = GetNode<AnimationPlayer>("../../BossAnimator/AnimationPlayer");
-        animationPlayer.Play("spr_Taunt_strip");
+        animationPlayer.Play("Taunt");
 
         tauntTimer = 0.0f;
 
         boss.Velocity = new Vector2(0, boss.Velocity.Y);
-
-        GD.Print($"Boss Taunt State: Playing 'spr_Taunt_strip'");
     }
 
     public override void Update(double delta)
