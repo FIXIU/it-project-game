@@ -24,6 +24,7 @@ public partial class BossIdle : State
 
         if (boss.CanSeePlayer())
         {
+            GD.Print("Can see player");
             float distanceToPlayer = boss.GetDistanceToPlayer();
             if (distanceToPlayer <= boss.AttackRange)
             {

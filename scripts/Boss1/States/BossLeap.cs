@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Godot;
 
@@ -13,6 +14,8 @@ public partial class BossLeap : State
     private Vector2 leapTarget;
     private bool targetSet = false;
     private Godot.Timer leapTimerNode;
+    private float leapDistance = 0;
+    private float distanceToPlayer = 0;
     
      public override void Enter()
     {
@@ -23,10 +26,12 @@ public partial class BossLeap : State
         hasLeaped = false;
         leapTimer = 0.0f;
         targetSet = false;
+        leapStartPosition = boss.GlobalPosition;
         if (boss.CanSeePlayer())
         {
             leapTarget = boss.Player.GlobalPosition;
         }
+        leapDistance = leapTarget.X - leapStartPosition.X;
     }
     
     public override void Update(double delta)
@@ -44,9 +49,14 @@ public partial class BossLeap : State
         }
         if (leapTimer >= 1.2f && leapTimer <= 1.67)
         {
+            leapTarget = boss.Player.GlobalPosition;
+            distanceToPlayer = Math.Abs(leapTarget.X - boss.GlobalPosition.X);
+            
             Vector2 dashDirection = boss.FacingRight ? Vector2.Right : Vector2.Left;
             
-            float dashSpeed = 300.0f;
+            GD.Print(distanceToPlayer);
+            
+            float dashSpeed = 3.0f * distanceToPlayer;
             boss.Velocity = new Vector2(dashDirection.X * dashSpeed, boss.Velocity.Y);
         }
         else

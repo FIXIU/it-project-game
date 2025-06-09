@@ -2164,8 +2164,9 @@ size = Vector2(112, 76)
 collision_layer = 0
 script = ExtResource("1_lsiai")
 AttackRange = 60.0
-AggroRange = 300.0
-VisionAngle = 120.0
+AggroRange = 400.0
+VisionRange = 500.0
+VisionAngle = 200.0
 StateMachine = NodePath("FSM")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -2273,6 +2274,7 @@ wait_time = 5.0
 wait_time = 3.0
 
 [node name="LineOfSightRay" type="RayCast2D" parent="."]
+target_position = Vector2(0, 200)
 
 [node name="LeapTimer" type="Timer" parent="."]
 wait_time = 10.0
