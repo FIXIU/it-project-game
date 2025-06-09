@@ -40,6 +40,9 @@ public partial class Boss : CharacterBody2D
     
     [Export] public StateMachine StateMachine;
 
+    [Export]
+    public Vector2 Position;
+
     public override void _Ready()
     {
         AnimationPlayer = GetNode<AnimationPlayer>("BossAnimator/AnimationPlayer");
@@ -70,8 +73,8 @@ public partial class Boss : CharacterBody2D
 
         TauntTimer.Start();
         StateMachine.TransitionTo("Idle");
-
-        GD.Print("Boss initialized successfully with raycast vision and attack detection");
+        
+        GlobalPosition = Position;
     }
     
     public override void _Process(double delta)

@@ -310,6 +310,7 @@ position = Vector2(30, 3)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("5_4nkto")]
 scale = Vector2(2, 2)
+Position = Vector2(1750, -163)
 
 [node name="DeathZones" type="Node" parent="."]
 
