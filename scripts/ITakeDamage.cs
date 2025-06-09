@@ -3,5 +3,5 @@ using System;
 
 public interface ITakeDamage
 {
-    void TakeDamage(float damage, Vector2? attackFromVector);
+    void TakeDamage(int damage);
 }

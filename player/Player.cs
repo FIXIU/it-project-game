@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Player : PlayerMovement
+public partial class Player : PlayerMovement, ITakeDamage
 {
     [Export]
     DeathScreen _deathScreen;

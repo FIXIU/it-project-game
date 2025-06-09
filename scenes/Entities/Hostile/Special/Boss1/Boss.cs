@@ -6,7 +6,7 @@ public partial class Boss : CharacterBody2D
     [Export] public float JumpVelocity = -400.0f;
     [Export] public float AttackRange = 50.0f;
     [Export] public float AggroRange = 200.0f;
-    [Export] public float Health = 100.0f;
+    [Export] public int Health = 500;
     [Export] public float MaxHealth = 100.0f;
     [Export] public float DashSpeed = 300.0f;
     [Export] public float LeapSpeed = 400.0f;
@@ -209,24 +209,24 @@ public partial class Boss : CharacterBody2D
         Scale = new Vector2(-Scale.X, Scale.Y);
     }
 
-    public void TakeDamage(float damage)
-    {
-        if (IsDead) return;
-
-        Health -= damage;
-        Health = Mathf.Max(0, Health);
-
-        EmitSignal(SignalName.HealthChanged, Health);
-
-        if (Health <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            StateMachine?.TransitionTo("Taunt");
-        }
-    }
+    // public void TakeDamage(float damage)
+    // {
+    //     if (IsDead) return;
+    //
+    //     Health -= damage;
+    //     Health = Mathf.Max(0, Health);
+    //
+    //     EmitSignal(SignalName.HealthChanged, Health);
+    //
+    //     if (Health <= 0)
+    //     {
+    //         Die();
+    //     }
+    //     else
+    //     {
+    //         StateMachine?.TransitionTo("Taunt");
+    //     }
+    // }
 
     private void Die()
     {
@@ -278,5 +278,19 @@ public partial class Boss : CharacterBody2D
         CanAttack = false;
         AttackCooldownTimer.Start();
     }
+
+    // public void TakeDamage(int damage)
+    // {
+    //     Health -= damage;
+    //     if (Health <= 0)
+    //     {
+    //         Die();
+    //     }
+    //     else
+    //     {
+    //         EmitSignal(SignalName.HealthChanged, Health);
+    //         StateMachine?.TransitionTo("Taunt");
+    //     }
+    // }
 }
 
