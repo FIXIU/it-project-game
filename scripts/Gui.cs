@@ -14,7 +14,7 @@ public partial class Gui : Control
         }
     }
     [Export]
-    private ProgressBar _healthBar;
+    private TextureProgressBar _healthBar;
     
     public override void _Ready()
     {
@@ -25,5 +25,10 @@ public partial class Gui : Control
     {
         _healthBar.Value = Health;
         GD.Print("Updated GUI");
+        if (Health < 0)
+        {
+            Health = 0;
+        }
+        _healthBar.GetChild<Label>(0).Text = $"{Health} HP";
     }
 }

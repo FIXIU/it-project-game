@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://b1f728ydutwaw"]
+[gd_scene load_steps=7 format=3 uid="uid://b1f728ydutwaw"]
 
 [ext_resource type="Script" uid="uid://dqa6tqqm26vrd" path="res://scripts/Gui.cs" id="1_jbthi"]
+[ext_resource type="Texture2D" uid="uid://c5r63sp4vdgie" path="res://assets/GUI/noHealth.png" id="2_shsct"]
+[ext_resource type="FontFile" uid="uid://06imve7oq3s5" path="res://assets/RobotoCondensed-VariableFont_wght.ttf" id="2_tqy5q"]
+[ext_resource type="Texture2D" uid="uid://c2vt4lhdtbwdq" path="res://assets/GUI/EmptyHealthBar.png" id="3_tqy5q"]
+[ext_resource type="Texture2D" uid="uid://rvxuybdwgxdk" path="res://assets/GUI/FullHealth.png" id="4_hywd1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tqy5q"]
+font = ExtResource("2_tqy5q")
+font_size = 17
+font_color = Color(0.67, 0.0134, 0.0134, 1)
+outline_size = 5
+outline_color = Color(0.33, 0.0132, 0.0132, 1)
 
 [node name="Gui" type="Control" node_paths=PackedStringArray("_healthBar")]
 layout_mode = 3
@@ -10,36 +21,47 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jbthi")
-_healthBar = NodePath("NinePatchRect2/ProgressBar")
+_healthBar = NodePath("NinePatchRect2/TextureProgressBar")
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
+texture_filter = 1
 layout_mode = 0
-offset_right = 244.0
-offset_bottom = 32.0
+offset_right = 132.0
+offset_bottom = 33.0
 
-[node name="ProgressBar" type="ProgressBar" parent="NinePatchRect2"]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="NinePatchRect2"]
+texture_filter = 1
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -204.0
-offset_top = -13.5
-offset_bottom = 13.5
-grow_horizontal = 0
+offset_left = -64.0
+offset_top = -16.0
+offset_right = 64.0
+offset_bottom = 16.0
+grow_horizontal = 2
 grow_vertical = 2
-step = 1.0
-value = 100.0
-rounded = true
+value = 40.0
+texture_under = ExtResource("2_shsct")
+texture_over = ExtResource("3_tqy5q")
+texture_progress = ExtResource("4_hywd1")
 
-[node name="Label" type="Label" parent="NinePatchRect2"]
+[node name="Label" type="Label" parent="NinePatchRect2/TextureProgressBar"]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -20.0
 offset_top = -11.5
-offset_right = 52.0
+offset_right = 20.0
 offset_bottom = 11.5
+grow_horizontal = 2
 grow_vertical = 2
-text = "HP"
+text = "100 HP"
+label_settings = SubResource("LabelSettings_tqy5q")
+horizontal_alignment = 1
+vertical_alignment = 1
