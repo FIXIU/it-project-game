@@ -60,7 +60,7 @@ public partial class Boss : CharacterBody2D
         AttackRaycast.CollideWithAreas = false;
         AttackRaycast.CollideWithBodies = true;
 
-        Player = GetNode<Node2D>("/root/Game/Player") ?? GetTree().GetFirstNodeInGroup("player") as Node2D;
+        Player = GetTree().GetFirstNodeInGroup("player") as Node2D;
 
         AttackCooldownTimer.Timeout += OnAttackCooldownTimeout;
         TauntTimer.Timeout += OnTauntTimeout;

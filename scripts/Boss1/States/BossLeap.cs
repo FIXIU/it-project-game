@@ -23,8 +23,6 @@ public partial class BossLeap : State
         hasLeaped = false;
         leapTimer = 0.0f;
         targetSet = false;
-        // Always set a target, regardless of seeing the player
-        targetSet = true;
         if (boss.CanSeePlayer())
         {
             leapTarget = boss.Player.GlobalPosition;
@@ -47,9 +45,8 @@ public partial class BossLeap : State
         if (leapTimer >= 1.2f && leapTimer <= 1.67)
         {
             Vector2 dashDirection = boss.FacingRight ? Vector2.Right : Vector2.Left;
-    
-            // Set a high velocity for the dash
-            float dashSpeed = 200.0f;
+            
+            float dashSpeed = 300.0f;
             boss.Velocity = new Vector2(dashDirection.X * dashSpeed, boss.Velocity.Y);
         }
         else

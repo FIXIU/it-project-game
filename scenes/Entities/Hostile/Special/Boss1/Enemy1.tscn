@@ -2171,6 +2171,7 @@ StateMachine = NodePath("FSM")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -16)
 shape = SubResource("RectangleShape2D_44cqv")
+one_way_collision_margin = 0.0
 
 [node name="BossAnimator" type="Node2D" parent="."]
 

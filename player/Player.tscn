@@ -1102,6 +1102,7 @@ height = 44.0
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "VisualsNode", "CollisionNode") groups=["player", "player_local"]]
 texture_filter = 1
 rotation = 0.000318175
+collision_layer = 0
 script = ExtResource("1_3c3w1")
 stateMachine = NodePath("FSM")
 VisualsNode = NodePath("PlayerAnimator/Sprite2D")
