@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://b1a1mbvdn762u"]
+
+[ext_resource type="FontFile" uid="uid://06imve7oq3s5" path="res://assets/RobotoCondensed-VariableFont_wght.ttf" id="1_nlqkp"]
+
+[resource]
+font = ExtResource("1_nlqkp")
+font_size = 14
+shadow_size = 0
