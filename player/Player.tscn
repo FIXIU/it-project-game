@@ -1099,7 +1099,7 @@ height = 19.799
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ofhxi"]
 height = 44.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "VisualsNode", "CollisionNode") groups=["player", "player_local"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "VisualsNode", "CollisionNode", "attackTimer") groups=["player", "player_local"]]
 texture_filter = 1
 rotation = 0.000318175
 collision_layer = 32
@@ -1107,6 +1107,7 @@ script = ExtResource("1_3c3w1")
 stateMachine = NodePath("FSM")
 VisualsNode = NodePath("PlayerAnimator/Sprite2D")
 CollisionNode = NodePath("CollisionShape2D")
+attackTimer = NodePath("AttackTimer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -24)
