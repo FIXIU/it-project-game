@@ -10,4 +10,3 @@ public partial class Fall : State
 		animationPlayer.Play("Fall"); // Assuming you have a "Fall" animation
 	}
 }
-
