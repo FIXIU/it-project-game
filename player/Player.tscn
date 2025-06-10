@@ -363,7 +363,7 @@ tracks/8/keys = {
 
 [sub_resource type="Animation" id="Animation_w24id"]
 resource_name = "KatanaBottom"
-length = 1.00001
+length = 0.6
 step = 0.142857
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -408,10 +408,10 @@ tracks/3/path = NodePath("PlayerAnimator/Sprite2D:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.142857, 0.285714, 0.428571, 0.571429, 0.714286, 0.857143),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.142858, 0.285715, 0.428572),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6]
+"values": [3, 4, 5, 6]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -468,7 +468,7 @@ tracks/8/path = NodePath("Hitbox/CollisionShape2D:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.571429, 0.714286, 0.857143, 1),
+"times": PackedFloat32Array(0, 0.142858, 0.285715, 0.428572, 0.571429),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [true, false, false, true, true]
@@ -480,7 +480,7 @@ tracks/9/path = NodePath("Hitbox/CollisionShape2D:shape:radius")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.676768, 0.714286),
+"times": PackedFloat32Array(0.248197, 0.285715),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [2.12154, 2.12154]
@@ -492,7 +492,7 @@ tracks/10/path = NodePath("Hitbox/CollisionShape2D:shape:height")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0.676768, 0.714286),
+"times": PackedFloat32Array(0.248197, 0.285715),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [19.799, 19.799]
@@ -504,7 +504,7 @@ tracks/11/path = NodePath("Hitbox/CollisionShape2D:position")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0.571429, 0.630253, 0.676768, 0.714286),
+"times": PackedFloat32Array(0.142858, 0.201682, 0.248197, 0.285715),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(4.99936, -2.00159), Vector2(34.9946, -17.0111), Vector2(27.9879, -38.0089), Vector2(-24.0134, -41.9924)]
@@ -516,7 +516,7 @@ tracks/12/path = NodePath("Hitbox/CollisionShape2D:rotation")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0.571429, 0.630253, 0.676768, 0.714286),
+"times": PackedFloat32Array(0.142858, 0.201682, 0.248197, 0.285715),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [1.57079, 1.57079, 1.0472, -0.785397]
@@ -528,7 +528,7 @@ tracks/13/path = NodePath("Hurtbox/CollisionShape2D:disabled")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 0.571429),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -536,7 +536,7 @@ tracks/13/keys = {
 
 [sub_resource type="Animation" id="Animation_uewl2"]
 resource_name = "KatanaTop"
-length = 1.00001
+length = 0.6
 step = 0.142857
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -569,10 +569,10 @@ tracks/2/path = NodePath("PlayerAnimator/Sprite2D:vframes")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
 "update": 1,
-"values": [1]
+"values": []
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -581,10 +581,10 @@ tracks/3/path = NodePath("PlayerAnimator/Sprite2D:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.142857, 0.285714, 0.428571, 0.571429, 0.714286, 0.857143),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.142858, 0.285715, 0.428572),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6]
+"values": [3, 4, 5, 6]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -593,10 +593,10 @@ tracks/4/path = NodePath("PlayerAnimator/Sprite2D:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
 "update": 0,
-"values": [Vector2(0, -20)]
+"values": []
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -641,7 +641,7 @@ tracks/8/path = NodePath("Hitbox/CollisionShape2D:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0.428571, 0.571429, 0.624384, 0.667322, 0.714286),
+"times": PackedFloat32Array(0, 0.142858, 0.195813, 0.238751, 0.285715),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(3.98345, -52.0013), Vector2(11.9844, -49.0038), Vector2(26.9895, -33.0086), Vector2(29.9952, -15.0095), Vector2(20.9994, -2.00668)]
@@ -653,7 +653,7 @@ tracks/9/path = NodePath("Hitbox/CollisionShape2D:rotation")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.428571, 0.571429, 0.624384, 0.667322, 0.714286),
+"times": PackedFloat32Array(0, 0.142858, 0.195813, 0.238751, 0.285715),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.523598, 0.785397, 1.27063, 1.66406, 2.09439]
@@ -665,7 +665,7 @@ tracks/10/path = NodePath("Hitbox/CollisionShape2D:disabled")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0.428571, 0.571429, 0.714286, 0.857143),
+"times": PackedFloat32Array(0, 0.142858, 0.285715, 0.428572),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [true, false, false, true]
@@ -677,7 +677,7 @@ tracks/11/path = NodePath("Hurtbox/CollisionShape2D:disabled")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 0.571429),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -1099,15 +1099,16 @@ height = 19.799
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ofhxi"]
 height = 44.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("VisualsNode", "CollisionNode", "stateMachine", "attackTimer") groups=["player", "player_local"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "VisualsNode", "CollisionNode", "attackTimer", "animationPlayer") groups=["player", "player_local"]]
 texture_filter = 1
 rotation = 0.000318175
 collision_layer = 32
 script = ExtResource("1_3c3w1")
+stateMachine = NodePath("FSM")
 VisualsNode = NodePath("PlayerAnimator/Sprite2D")
 CollisionNode = NodePath("CollisionShape2D")
-stateMachine = NodePath("FSM")
 attackTimer = NodePath("AttackTimer")
+animationPlayer = NodePath("PlayerAnimator/AnimationPlayer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -24)
@@ -1168,7 +1169,7 @@ script = ExtResource("16_t8epa")
 wait_time = 0.5
 
 [node name="Hitbox" type="Area2D" parent="."]
-collision_layer = 8
+collision_layer = 16
 collision_mask = 0
 script = ExtResource("17_uewl2")
 
@@ -1188,3 +1189,5 @@ position = Vector2(-0.0076362, -24)
 shape = SubResource("CapsuleShape2D_ofhxi")
 disabled = true
 debug_color = Color(4.81308e-08, 0.64014, 0.354372, 0.42)
+
+[connection signal="timeout" from="AttackTimer" to="." method="OnAttackTimerTimeout"]

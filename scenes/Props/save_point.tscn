@@ -13,6 +13,7 @@ colors = PackedColorArray(1, 1, 1, 0.493056, 0.3848, 0.74, 0.3848, 1, 1, 1, 1, 0
 [node name="SavePoint" type="Node2D"]
 
 [node name="Area2D" type="Area2D" parent="."]
+collision_mask = 32
 script = ExtResource("1_y4dwb")
 
 [node name="Sprite2D" type="Sprite2D" parent="Area2D"]

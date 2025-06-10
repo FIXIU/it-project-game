@@ -19,6 +19,10 @@ public partial class Player : PlayerMovement, ITakeDamage
             GD.Print("Player health is zero or below. Handling death...");
             HandleDeath();
         }
+        if (health >= 100)
+        {
+            health = 100;
+        }
     }
 
     public void HandleDeath()

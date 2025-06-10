@@ -1,110 +1,97 @@
 using Godot;
+using System;
 
 public partial class PlayerMovement : CharacterBody2D
 {
-	[Export] public float Speed = 100.0f;
-	[Export] public float JumpVelocity = -300.0f;
-	[Export] public float wallJumpSpeedMultiplier = 1.5f;
-	[Export] public float wallJumpBoostTime = 0.3f;
-	[Export] public float wallJumpPlayerInfluence = 0.6f;
-	[Export] public float jumpCutMultiplier = 0.5f;
-	[Export] public float minJumpVelocity = -50.0f;
-	[Export] public float coyoteTimeMax = 0.1f;
-	[Export] public float wallCoyoteTimeMax = 0.1f;
-
-	[Export] public Node2D VisualsNode;
-	[Export] public Node2D CollisionNode;
-
-	private Vector2 gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsVector2();
-
-	[Export] private StateMachine stateMachine;
-	[Export] private Timer attackTimer;
-
-	// Input variables
+	public const float Speed = 300.0f;
+	public const float JumpVelocity = -450.0f;
+	[Export] private float jumpCutMultiplier = 0.4f;
+	[Export] private float minJumpVelocity = -150.0f;
+	[Export] private float wallJumpBoostTime = 0.3f;
+	[Export] private float wallJumpSpeedMultiplier = 1.5f;
+	[Export] private float wallJumpPlayerInfluence = 0.2f;
+	[Export] private float coyoteTimeMax = 0.15f;
+	[Export] private float wallCoyoteTimeMax = 0.1f;
+	private bool isJumping = false;
+	private bool wasOnFloor = false;
+	private bool wasOnWall = false;
+	private float currentWallJumpTime = 0f;
+	private float coyoteTimeLeft = 0f;
+	private float wallCoyoteTimeLeft = 0f;
+	private float wallJumpForce = 0f;
+	private int wallJumpDirection = 0;
+	private Vector2 lastWallNormal = Vector2.Zero;
+	[Export] public StateMachine stateMachine;
+	[Export] public Node2D VisualsNode { get; set; }
+	[Export] public Node2D CollisionNode { get; set; }
 	private Vector2 inputDirection;
 	private bool jumpPressed;
 	private bool jumpReleased;
-	private bool attackPressed;
-
-	// State variables
 	private bool onFloor;
 	private bool onWall;
-	private bool isJumping;
+	private Vector2 gravity;
+	
+	[Export]
+	private Timer attackTimer;
+	private bool attackPressed;
+
+	[Export]
+	private AnimationPlayer animationPlayer;
+	
 	private bool canAttack = true;
-
-	// Jump mechanics
-	private float coyoteTimeLeft;
-	private float wallCoyoteTimeLeft;
-	private bool wasOnFloor;
-	private bool wasOnWall;
-	private Vector2 lastWallNormal;
-
-	// Wall jump mechanics
-	private float currentWallJumpTime;
-	private float wallJumpForce;
-	private int wallJumpDirection;
-
-	public override void _Ready()
-	{
-		// Connect attack timer timeout signal - THIS IS THE KEY FIX!
-		if (attackTimer != null)
-		{
-			attackTimer.Timeout += OnAttackTimerTimeout;
-			attackTimer.OneShot = true;
-			attackTimer.WaitTime = 1.0f; // 1 second cooldown - adjust as needed
-		}
-
-		// Initialize state
-		coyoteTimeLeft = 0;
-		wallCoyoteTimeLeft = 0;
-		currentWallJumpTime = 0;
-	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		GetInput();
-		UpdatePhysicsState();
-
+		float deltaFloat = (float)delta;
+		
+		
+		CacheInputAndPhysicsState();
+		if (attackPressed && attackTimer.TimeLeft <= 0)
+		{
+			GD.Print("Attack pressed");
+			PerformAttack();
+			GD.Print("Stopped performing attack");
+		}
+		
+		
 		Vector2 velocity = Velocity;
-
-		UpdateTimers((float)delta);
+		
+		UpdateTimers(deltaFloat);
+		
 		UpdateCoyoteTime();
 		UpdateWallCoyoteTime();
-
-		ApplyGravity(ref velocity, (float)delta);
-		HandleWallSlide(ref velocity, (float)delta);
+		
+		ApplyGravity(ref velocity, deltaFloat);
+		
+		HandleWallSlide(ref velocity, deltaFloat);
+		
 		HandleJumping(ref velocity);
+		
 		HandleHorizontalMovement(ref velocity);
-		HandleAttackInput(); // Handle attack input
-		HandleVisualFlipping();
-		HandleStateTransitions(velocity);
 
+		HandleAttackInput();
+		
+		HandleVisualFlipping();
+		
+		HandleStateTransitions(velocity);
+		
 		Velocity = velocity;
 		MoveAndSlide();
+		
 	}
-
-	private void GetInput()
+	
+	private void CacheInputAndPhysicsState()
 	{
-		inputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-		jumpPressed = Input.IsActionJustPressed("jump");
-		jumpReleased = Input.IsActionJustReleased("jump");
+		inputDirection = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+		jumpPressed = Input.IsActionJustPressed("ui_accept");
+		jumpReleased = Input.IsActionJustReleased("ui_accept");
 		attackPressed = Input.IsActionJustPressed("attack");
-	}
-
-	private void UpdatePhysicsState()
-	{
+		
 		onFloor = IsOnFloor();
 		onWall = IsOnWall();
+		gravity = GetGravity();
 	}
-
-	private void HandleAttackInput()
-	{
-		if (attackPressed && canAttack)
-		{
-			PerformAttack();
-		}
-	}
-
+	
 	private void UpdateTimers(float delta)
 	{
 		if (currentWallJumpTime > 0)
@@ -115,14 +102,14 @@ public partial class PlayerMovement : CharacterBody2D
 				ResetWallJumpState();
 			}
 		}
-
+		
 		if (coyoteTimeLeft > 0)
 			coyoteTimeLeft = Mathf.Max(0, coyoteTimeLeft - delta);
-
+			
 		if (wallCoyoteTimeLeft > 0)
 			wallCoyoteTimeLeft = Mathf.Max(0, wallCoyoteTimeLeft - delta);
 	}
-
+	
 	private void UpdateCoyoteTime()
 	{
 		if (onFloor)
@@ -136,7 +123,7 @@ public partial class PlayerMovement : CharacterBody2D
 			wasOnFloor = false;
 		}
 	}
-
+	
 	private void UpdateWallCoyoteTime()
 	{
 		if (onWall && !onFloor)
@@ -150,7 +137,7 @@ public partial class PlayerMovement : CharacterBody2D
 			wasOnWall = false;
 		}
 	}
-
+	
 	private void ApplyGravity(ref Vector2 velocity, float delta)
 	{
 		if (!onFloor && !onWall)
@@ -158,19 +145,17 @@ public partial class PlayerMovement : CharacterBody2D
 			velocity += gravity * delta;
 		}
 	}
-
+	
 	private void HandleWallSlide(ref Vector2 velocity, float delta)
 	{
 		if (onWall && !onFloor)
 		{
 			velocity += gravity * 0.5f * delta;
-
-			// Don't change state if attacking
-			if (stateMachine?.CurrentState.Name != "Attack")
+			if (stateMachine?.CurrentState.Name != "Attack" || canAttack)
 			{
 				stateMachine?.TransitionTo("WallSlide");
 			}
-
+			
 			if (inputDirection.X != 0)
 			{
 				FlipVisuals(inputDirection.X);
@@ -178,7 +163,7 @@ public partial class PlayerMovement : CharacterBody2D
 			}
 		}
 	}
-
+	
 	private void HandleJumping(ref Vector2 velocity)
 	{
 		if (CanWallJump() && jumpPressed)
@@ -189,54 +174,52 @@ public partial class PlayerMovement : CharacterBody2D
 		{
 			PerformRegularJump(ref velocity);
 		}
-
+		
 		if (isJumping && jumpReleased && velocity.Y < minJumpVelocity)
 		{
 			velocity.Y *= jumpCutMultiplier;
 		}
 	}
-
+	
 	private bool CanWallJump()
 	{
 		return (onWall || wallCoyoteTimeLeft > 0) && !onFloor;
 	}
-
+	
 	private bool CanRegularJump()
 	{
 		return (onFloor || coyoteTimeLeft > 0) && !CanWallJump();
 	}
-
+	
 	private void PerformWallJump(ref Vector2 velocity)
 	{
 		Vector2 wallNormal = onWall ? GetWallNormal().Normalized() : lastWallNormal;
-
+		
 		velocity.Y = JumpVelocity;
 		isJumping = true;
-
+		
 		wallJumpDirection = (int)Mathf.Sign(wallNormal.X);
 		wallJumpForce = Speed * wallJumpSpeedMultiplier;
 		currentWallJumpTime = wallJumpBoostTime;
-
+		
 		wallCoyoteTimeLeft = 0;
-
+		
 		stateMachine?.TransitionTo("Jump");
 	}
-
+	
 	private void PerformRegularJump(ref Vector2 velocity)
 	{
 		velocity.Y = JumpVelocity;
 		coyoteTimeLeft = 0;
 		isJumping = true;
-
+		
 		stateMachine?.TransitionTo("Jump");
 	}
-
+	
 	private void HandleHorizontalMovement(ref Vector2 velocity)
 	{
-		// Don't process horizontal movement during attack
-		if (stateMachine?.CurrentState.Name == "Attack")
+		if (stateMachine?.CurrentState.Name == "Attack" || !canAttack)
 			return;
-
 		if (currentWallJumpTime > 0)
 		{
 			ApplyWallJumpMovement(ref velocity);
@@ -260,16 +243,16 @@ public partial class PlayerMovement : CharacterBody2D
 			}
 		}
 	}
-
+	
 	private void ApplyWallJumpMovement(ref Vector2 velocity)
 	{
 		float wallJumpInfluence = currentWallJumpTime / wallJumpBoostTime;
 		float playerInfluence = wallJumpPlayerInfluence + (1.0f - wallJumpPlayerInfluence) * (1.0f - wallJumpInfluence);
-
+		
 		velocity.X = (wallJumpDirection * wallJumpForce * wallJumpInfluence) + 
-					 (inputDirection.X * Speed * playerInfluence);
+					(inputDirection.X * Speed * playerInfluence);
 	}
-
+	
 	private void HandleVisualFlipping()
 	{
 		if (inputDirection.X != 0)
@@ -278,45 +261,51 @@ public partial class PlayerMovement : CharacterBody2D
 			FlipCollision(inputDirection.X);
 		}
 	}
-
+	
 	private void FlipVisuals(float direction)
 	{
 		if (VisualsNode == null) return;
-
+		
 		float absScaleX = Mathf.Abs(VisualsNode.Scale.X);
 		if (absScaleX == 0) absScaleX = 1.0f;
-
+		
 		float newScaleX = direction < 0 ? -absScaleX : absScaleX;
 		VisualsNode.Scale = new Vector2(newScaleX, VisualsNode.Scale.Y);
 	}
-
+	
 	private void FlipCollision(float direction)
 	{
 		if (CollisionNode == null) return;
-
+		
 		float absPosX = Mathf.Abs(CollisionNode.Position.X);
 		if (absPosX == 0) absPosX = 1.0f;
-
+		
 		float newPosX = direction < 0 ? absPosX : -absPosX;
 		CollisionNode.Position = new Vector2(newPosX, CollisionNode.Position.Y);
 	}
-
+	
 	private void HandleStateTransitions(Vector2 velocity)
 	{
-		// Don't change states if we're currently attacking - THIS IS CRUCIAL!
-		if (stateMachine?.CurrentState.Name == "Attack")
+		if (stateMachine?.CurrentState.Name == "Attack" || !canAttack)
 			return;
-
 		if (!onFloor && velocity.Y > 0 && !onWall)
 		{
 			stateMachine?.TransitionTo("Fall");
 		}
 	}
-
+	
 	private void ResetWallJumpState()
 	{
 		wallJumpForce = 0;
 		wallJumpDirection = 0;
+	}
+
+	private void HandleAttackInput()
+	{
+		if (attackPressed && canAttack)
+		{
+			PerformAttack();
+		}
 	}
 
 	private void PerformAttack()
@@ -333,8 +322,6 @@ public partial class PlayerMovement : CharacterBody2D
 
 		GD.Print("Attack performed - cooldown started");
 	}
-
-	// THIS IS THE KEY METHOD THAT WAS MISSING!
 	private void OnAttackTimerTimeout()
 	{
 		canAttack = true;

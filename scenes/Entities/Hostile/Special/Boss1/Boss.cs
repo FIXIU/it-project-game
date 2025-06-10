@@ -1,6 +1,7 @@
+using System.Net.Http;
 using Godot;
 
-public partial class Boss : CharacterBody2D
+public partial class Boss : CharacterBody2D, ITakeDamage
 {
     [Export] public float Speed = 100.0f;
     [Export] public float JumpVelocity = -400.0f;
@@ -10,7 +11,7 @@ public partial class Boss : CharacterBody2D
     [Export] public float MaxHealth = 100.0f;
     [Export] public float DashSpeed = 300.0f;
     [Export] public float LeapSpeed = 400.0f;
-    
+
     [Export] public float VisionRange = 300.0f;
     [Export] public float VisionAngle = 90.0f;
     [Export] public float AttackDetectionRange = 60.0f;
@@ -18,7 +19,7 @@ public partial class Boss : CharacterBody2D
 
     [Signal] public delegate void HealthChangedEventHandler(float health);
     [Signal] public delegate void BossDefeatedEventHandler();
-    
+
     public AnimationPlayer AnimationPlayer;
     public Node2D Player;
     public Timer AttackCooldownTimer;
@@ -37,11 +38,13 @@ public partial class Boss : CharacterBody2D
     public float Gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     public Vector2 TargetPosition;
     public bool FacingRight = true;
-    
+
     [Export] public StateMachine StateMachine;
 
     [Export]
     public Vector2 Position;
+
+    [Export] private Label HealthIndicator;
 
     public override void _Ready()
     {
@@ -73,16 +76,16 @@ public partial class Boss : CharacterBody2D
 
         TauntTimer.Start();
         StateMachine.TransitionTo("Idle");
-        
+
         GlobalPosition = Position;
     }
-    
+
     public override void _Process(double delta)
     {
         StateMachine?.CurrentState?.Update(delta);
-        
+
         UpdatePlayerDetection();
-        
+
         UpdateAttackRangeDetection();
     }
 
@@ -162,7 +165,7 @@ public partial class Boss : CharacterBody2D
         Vector2 forwardDirection = FacingRight ? Vector2.Right : Vector2.Left;
         float angleToPlayer = forwardDirection.AngleTo(directionToPlayer);
         float halfVisionAngle = Mathf.DegToRad(VisionAngle / 2.0f);
-        
+
         return Mathf.Abs(angleToPlayer) <= halfVisionAngle;
     }
 
@@ -182,12 +185,12 @@ public partial class Boss : CharacterBody2D
         if (raycast.IsColliding())
         {
             var collider = raycast.GetCollider();
-            
+
             if (collider is Node node && node.IsInGroup("player"))
             {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -282,18 +285,15 @@ public partial class Boss : CharacterBody2D
         AttackCooldownTimer.Start();
     }
 
-    // public void TakeDamage(int damage)
-    // {
-    //     Health -= damage;
-    //     if (Health <= 0)
-    //     {
-    //         Die();
-    //     }
-    //     else
-    //     {
-    //         EmitSignal(SignalName.HealthChanged, Health);
-    //         StateMachine?.TransitionTo("Taunt");
-    //     }
-    // }
+    public void TakeDamage(int damage)
+    {
+
+        Health -= damage;
+        GD.Print($"BOSS DAMAGED: {Health}");
+        if (Health <= 0)
+        {
+            Die();
+        }
+    }
 }
 
