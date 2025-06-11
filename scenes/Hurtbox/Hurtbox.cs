@@ -18,6 +18,9 @@ public partial class Hurtbox : Area2D
             return;
         }
         
+        // ignore self-inflicted hits
+        if (hitbox.Attacker == Owner)
+            return;
         if(Owner is ITakeDamage ownerTakeDamage)
         {
             ownerTakeDamage.TakeDamage(hitbox.Damage);
