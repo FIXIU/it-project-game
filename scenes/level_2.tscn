@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cg8aiqm503afb" path="res://scenes/DeathScreen.tscn" id="2_eqxsl"]
 [ext_resource type="PackedScene" uid="uid://7wuuw6emwa6u" path="res://scenes/PauseMenu.tscn" id="3_b4j7a"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wo48x"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b4j7a"]
 texture = ExtResource("2_b4j7a")
 13:3/0 = 0
 14:3/0 = 0
@@ -204,10 +204,50 @@ texture = ExtResource("2_b4j7a")
 14:21/0/physics_layer_0/polygon_0/points = PackedVector2Array(-6, 8, -6, -8, 8, -8, 8, 8)
 15:21/0 = 0
 15:21/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, -8, -8, 8, -8, 8, 8)
+6:4/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+7:4/0 = 0
+5:3/0 = 0
+5:4/0 = 0
+5:5/0 = 0
+4:5/0 = 0
+4:4/0 = 0
+4:3/0 = 0
+3:3/0 = 0
+3:4/0 = 0
+3:5/0 = 0
+2:5/0 = 0
+2:4/0 = 0
+2:3/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+7:0/0 = 0
+6:0/0 = 0
+5:0/0 = 0
+4:0/0 = 0
+3:0/0 = 0
+2:0/0 = 0
+10:0/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+11:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_y0kc7"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_wo48x")
+sources/0 = SubResource("TileSetAtlasSource_b4j7a")
 
 [node name="Level 2" type="Node2D"]
 
@@ -216,9 +256,11 @@ _deathScreen = NodePath("../CanvasLayer/DeathScreen")
 gui = NodePath("../CanvasLayer/Gui")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
+texture_filter = 1
 tile_set = SubResource("TileSet_y0kc7")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Gui" parent="CanvasLayer" instance=ExtResource("1_pbc48")]
 
