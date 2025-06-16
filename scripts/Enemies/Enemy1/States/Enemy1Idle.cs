@@ -31,7 +31,7 @@ namespace Enemies.Enemy1.States
             }
         }
 
-        public override void Update(double delta)
+        public override void Update(float delta)
         {
             if (enemy.IsDead) return;
             
@@ -46,16 +46,21 @@ namespace Enemies.Enemy1.States
                 if (canSeePlayer)
                 {
                     // If player is in attack range, attack
-                    if (distanceToPlayer <= enemy.AttackRange)
+                    if (distanceToPlayer <= enemy.AttackRange && enemy.AttackCooldownTimer.TimeLeft <= 0)
                     {
                         GD.Print("Enemy1Idle: Transitioning to Attack");
                         fsm?.TransitionTo("Attack");
                     }
                     // If player is visible but out of attack range, run towards them
-                    else
+                    else if (enemy.standRay.IsColliding())
                     {
                         GD.Print("Enemy1Idle: Transitioning to Run");
                         fsm?.TransitionTo("Run");
+                    }
+                    else
+                    {
+                        GD.Print("Enemy1Idle: Player is out of attack range, but can see them. Flipping sprite.");
+                        enemy.FlipSprite(enemy.GetDirectionToPlayer());
                     }
                 }
                 else

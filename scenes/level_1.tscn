@@ -1011,7 +1011,7 @@ scale = Vector2(2, 2)
 Position = Vector2(4402, -150)
 
 [node name="Player" parent="." node_paths=PackedStringArray("_deathScreen", "gui") instance=ExtResource("23_d5akn")]
-position = Vector2(3946, -198)
+position = Vector2(2662, -151)
 _deathScreen = NodePath("../CanvasLayer/DeathScreen")
 gui = NodePath("../CanvasLayer/Gui")
 wallJumpBoostTime = 0.5
@@ -1332,5 +1332,5 @@ position = Vector2(3392, -110)
 [node name="CaveAssets" type="Node" parent="."]
 
 [node name="Enemy Samurai" parent="." instance=ExtResource("20_isj1j")]
-position = Vector2(214, -5)
+position = Vector2(2875, -98)
 scale = Vector2(2, 2)

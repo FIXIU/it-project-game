@@ -40,7 +40,7 @@ namespace Enemies.Enemy1.States
             GD.Print("Enemy1 has died!");
         }
 
-        public override void Update(double delta)
+        public override void Update(float delta)
         {
             if (enemy == null) return;
             

@@ -38,7 +38,7 @@ namespace Enemies.Enemy1.States
             hurtTimer.Start();
         }
 
-        public override void Update(double delta)
+        public override void Update(float delta)
         {
             if (enemy == null || enemy.IsDead) return;
             

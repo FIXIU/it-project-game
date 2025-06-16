@@ -92,6 +92,18 @@ tracks/5/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite2D:hframes")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [7]
+}
 
 [sub_resource type="Animation" id="Animation_48p7f"]
 resource_name = "Hurt"
@@ -356,11 +368,12 @@ height = 34.0
 radius = 1.86603
 height = 21.5885
 
-[node name="Enemy Samurai" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "AnimationPlayer")]
+[node name="Enemy Samurai" type="CharacterBody2D" node_paths=PackedStringArray("stateMachine", "AnimationPlayer", "AttackCooldownTimer")]
 collision_layer = 0
 script = ExtResource("1_48p7f")
 stateMachine = NodePath("FSM")
 AnimationPlayer = NodePath("EnemyAnimator/AnimationPlayer")
+AttackCooldownTimer = NodePath("AttackTimer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2.5, -15)
@@ -418,3 +431,10 @@ script = ExtResource("11_dgtff")
 script = ExtResource("12_0qc8y")
 
 [node name="LineOfSight" type="RayCast2D" parent="."]
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="StandRay" type="RayCast2D" parent="."]
+position = Vector2(6, 0)
+target_position = Vector2(0, 10)

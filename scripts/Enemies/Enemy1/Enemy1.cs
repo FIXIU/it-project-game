@@ -25,6 +25,8 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
 
     private RayCast2D lineOfSightRay;
 
+    public RayCast2D standRay;
+
     public Node2D Player { get; private set; }
     public bool IsDead { get; private set; }
 
@@ -33,20 +35,18 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
     private bool animationsEnabled = true;
     private bool facingRight = true; // Track which direction the enemy is facing
 
+    [Export] public Timer AttackCooldownTimer;
+
     // Helper method to flip the enemy sprite based on direction
     public void FlipSprite(Vector2 direction)
     {
-        if (direction.X > 0 && !facingRight)
+        bool shouldFaceRight = direction.X > 0;
+        
+        if (shouldFaceRight != facingRight)
         {
-            // Moving right, should face right
-            facingRight = true;
-            Scale = new Vector2(Mathf.Abs(Scale.X), Scale.Y);
-        }
-        else if (direction.X < 0 && facingRight)
-        {
-            // Moving left, should face left
-            facingRight = false;
-            Scale = new Vector2(-Mathf.Abs(Scale.X), Scale.Y);
+            facingRight = shouldFaceRight;
+            // Flip the sprite by negating the X scale
+            Scale = new Vector2(-Scale.X, Scale.Y);
         }
     }
 
@@ -106,6 +106,7 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
         
         // Try to get the LineOfSight RayCast2D, but don't fail if it doesn't exist
         lineOfSightRay = GetNodeOrNull<RayCast2D>("LineOfSight");
+        standRay = GetNodeOrNull<RayCast2D>("StandRay");
         if (lineOfSightRay == null)
         {
             GD.PrintErr("Warning: LineOfSight RayCast2D node not found for Enemy1. Line of sight checking will be disabled.");
@@ -165,7 +166,11 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
 
     public Vector2 GetDirectionToPlayer()
     {
-        return (Player.GlobalPosition - GlobalPosition).Normalized();
+        if (Player == null) return Vector2.Zero;
+    
+        Vector2 direction = (Player.GlobalPosition - GlobalPosition).Normalized();
+        
+        return direction;
     }
 
     public float GetDistanceToPlayer()
