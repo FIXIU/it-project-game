@@ -7,7 +7,7 @@ public partial class State : Node
 
     public virtual void Enter() { }
     public virtual void Exit() { }
-    public virtual new void Ready() { }
+    public virtual void Ready() { }
     public virtual void Update(double delta) { }
     public virtual void Update(float delta) { }
     public virtual void PhysicsUpdate(float delta) { }

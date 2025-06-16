@@ -46,19 +46,7 @@ public partial class StateMachine : Node
     {
         if (_currentState != null)
         {
-            // Debug: Print current state periodically (every 60 frames ≈ 1 second)
-            if (Engine.GetProcessFrames() % 60 == 0)
-            {
-                GD.Print($"StateMachine: Current state is '{_currentState.Name}', calling Update()");
-            }
-            _currentState.Update(delta);
-        }
-        else
-        {
-            if (Engine.GetProcessFrames() % 60 == 0)
-            {
-                GD.PrintErr("StateMachine: No current state!");
-            }
+            _currentState.Update((float)delta);
         }
     }
     public override void _PhysicsProcess(double delta)

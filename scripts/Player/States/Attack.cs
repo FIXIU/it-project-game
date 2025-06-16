@@ -25,10 +25,14 @@ public partial class Attack : State
 
 		animationPlayer.Play(_attackAnimations[_currentAttackIndex]);
 		GD.Print($"Attack State: Playing 'Attack'. Current animation: {animationPlayer.CurrentAnimation}");
+
+		GetNode<Player>("../..").Velocity = new Vector2(0, GetNode<Player>("../..").Velocity.Y);
 	}
 
 	public override void _Process(double delta)
 	{
+		GetNode<Player>("../..").Velocity = new Vector2(0, GetNode<Player>("../..").Velocity.Y);
+
 		if (hasAttacked)
 		{
 			attackTimer += delta;

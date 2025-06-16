@@ -42,7 +42,7 @@ public partial class Boss : CharacterBody2D, ITakeDamage
     [Export] public StateMachine StateMachine;
 
     [Export]
-    public new Vector2 Position;
+    public Vector2 Position;
 
     [Export] private Label HealthIndicator;
 
