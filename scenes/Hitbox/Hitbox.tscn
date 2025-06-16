@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ctmv1ie2a8jln" path="res://scenes/Hitbox/Hitbox.cs" id="1"]
 
 [sub_resource type="CircleShape2D" id="1"]
+radius = 8.06226
 
 [node name="Hitbox" type="Area2D"]
 collision_layer = 8
