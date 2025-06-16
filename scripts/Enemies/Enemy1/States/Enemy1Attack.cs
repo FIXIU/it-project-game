@@ -25,6 +25,13 @@ namespace Enemies.Enemy1.States
             // Play attack animation safely
             enemy.PlayAnimationSafely("Attack");
 
+            // Face the player when attacking
+            if (enemy.Player != null)
+            {
+                Vector2 directionToPlayer = enemy.GetDirectionToPlayer();
+                enemy.FlipSprite(directionToPlayer);
+            }
+
             // Stop movement during attack
             if (enemy != null)
             {

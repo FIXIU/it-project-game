@@ -10,6 +10,7 @@ namespace Enemies.Enemy1.States
 
         public override void Enter()
         {
+            GD.Print("Enemy1Idle: Entering Idle state");
             enemy = GetNode<Enemy1>("../..");
 
             if (enemy == null)
@@ -18,6 +19,8 @@ namespace Enemies.Enemy1.States
                 return;
             }
 
+            GD.Print($"Enemy1Idle: Enemy found. FSM reference: {(fsm != null ? "exists" : "null")}");
+            
             // Play idle animation safely
             enemy.PlayAnimationSafely("Idle");
 
@@ -32,21 +35,37 @@ namespace Enemies.Enemy1.States
         {
             if (enemy.IsDead) return;
             
-            // Check if player is visible
-            if (enemy.Player != null && enemy.CanSeePlayer())
+            // Debug information
+            if (enemy.Player != null)
             {
                 float distanceToPlayer = enemy.GetDistanceToPlayer();
+                bool canSeePlayer = enemy.CanSeePlayer();
+                GD.Print($"Enemy1Idle: Player found. Distance: {distanceToPlayer:F1}, CanSee: {canSeePlayer}, AttackRange: {enemy.AttackRange}, SightRange: {enemy.SightRange}");
                 
-                // If player is in attack range, attack
-                if (distanceToPlayer <= enemy.AttackRange)
+                // Check if player is visible
+                if (canSeePlayer)
                 {
-                    fsm?.TransitionTo("Attack");
+                    // If player is in attack range, attack
+                    if (distanceToPlayer <= enemy.AttackRange)
+                    {
+                        GD.Print("Enemy1Idle: Transitioning to Attack");
+                        fsm?.TransitionTo("Attack");
+                    }
+                    // If player is visible but out of attack range, run towards them
+                    else
+                    {
+                        GD.Print("Enemy1Idle: Transitioning to Run");
+                        fsm?.TransitionTo("Run");
+                    }
                 }
-                // If player is visible but out of attack range, run towards them
                 else
                 {
-                    fsm?.TransitionTo("Run");
+                    GD.Print("Enemy1Idle: Cannot see player");
                 }
+            }
+            else
+            {
+                GD.Print("Enemy1Idle: No player found");
             }
         }
     }

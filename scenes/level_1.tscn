@@ -401,9 +401,11 @@ texture = ExtResource("1_014kd")
 16:1/0 = 0
 16:2/0 = 0
 16:3/0 = 0
+16:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -6, -8, -6, 8, -8, 8)
 15:3/0 = 0
 14:3/0 = 0
 13:3/0 = 0
+13:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(5, -8, 8, -8, 8, 8, 5, 8)
 13:2/0 = 0
 13:1/0 = 0
 14:1/0 = 0
@@ -1009,7 +1011,7 @@ scale = Vector2(2, 2)
 Position = Vector2(4402, -150)
 
 [node name="Player" parent="." node_paths=PackedStringArray("_deathScreen", "gui") instance=ExtResource("23_d5akn")]
-position = Vector2(-33.0002, 1.00002)
+position = Vector2(3946, -198)
 _deathScreen = NodePath("../CanvasLayer/DeathScreen")
 gui = NodePath("../CanvasLayer/Gui")
 wallJumpBoostTime = 0.5
@@ -1331,3 +1333,4 @@ position = Vector2(3392, -110)
 
 [node name="Enemy Samurai" parent="." instance=ExtResource("20_isj1j")]
 position = Vector2(214, -5)
+scale = Vector2(2, 2)

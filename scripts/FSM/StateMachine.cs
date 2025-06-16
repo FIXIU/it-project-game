@@ -46,7 +46,19 @@ public partial class StateMachine : Node
     {
         if (_currentState != null)
         {
-            _currentState.Update((float)delta);
+            // Debug: Print current state periodically (every 60 frames ≈ 1 second)
+            if (Engine.GetProcessFrames() % 60 == 0)
+            {
+                GD.Print($"StateMachine: Current state is '{_currentState.Name}', calling Update()");
+            }
+            _currentState.Update(delta);
+        }
+        else
+        {
+            if (Engine.GetProcessFrames() % 60 == 0)
+            {
+                GD.PrintErr("StateMachine: No current state!");
+            }
         }
     }
     public override void _PhysicsProcess(double delta)
@@ -65,12 +77,23 @@ public partial class StateMachine : Node
     }
     public void TransitionTo(string stateName)
     {
-        if (!_states.ContainsKey(stateName) || _currentState == _states[stateName])
+        
+        if (!_states.ContainsKey(stateName))
+        {
+            GD.PrintErr($"StateMachine: State '{stateName}' not found!");
             return;
+        }
+        
+        if (_currentState == _states[stateName])
+        {
+            return;
+        }
+        
         if (_currentState != null)
         {
             _currentState.Exit();
         }
+        
         _currentState = _states[stateName];
         _currentState.Enter();
     }

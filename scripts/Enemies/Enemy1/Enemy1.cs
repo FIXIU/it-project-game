@@ -31,6 +31,24 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
     [Export] public AnimationPlayer AnimationPlayer;
     
     private bool animationsEnabled = true;
+    private bool facingRight = true; // Track which direction the enemy is facing
+
+    // Helper method to flip the enemy sprite based on direction
+    public void FlipSprite(Vector2 direction)
+    {
+        if (direction.X > 0 && !facingRight)
+        {
+            // Moving right, should face right
+            facingRight = true;
+            Scale = new Vector2(Mathf.Abs(Scale.X), Scale.Y);
+        }
+        else if (direction.X < 0 && facingRight)
+        {
+            // Moving left, should face left
+            facingRight = false;
+            Scale = new Vector2(-Mathf.Abs(Scale.X), Scale.Y);
+        }
+    }
 
     // Helper method to safely play animations
     public void PlayAnimationSafely(string animationName)
@@ -122,6 +140,13 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
         }
         
         stateMachine.TransitionTo("Idle");
+        
+        // Debug: Print enemy status every 2 seconds
+        var debugTimer = new Timer();
+        AddChild(debugTimer);
+        debugTimer.WaitTime = 2.0f;
+        debugTimer.Timeout += PrintEnemyStatus;
+        debugTimer.Start();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -155,30 +180,40 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
 
     public bool CanSeePlayer()
     {
-        if (Player == null || lineOfSightRay == null) return false;
+        if (Player == null) return false;
         
         float distanceToPlayer = GetDistanceToPlayer();
         
         // Check if player is within sight range
         if (distanceToPlayer > sightRange) return false;
         
-        // Point the raycast towards the player
-        Vector2 directionToPlayer = GetDirectionToPlayer();
-        lineOfSightRay.TargetPosition = directionToPlayer * distanceToPlayer;
-        
-        // Force the raycast to update
-        lineOfSightRay.ForceRaycastUpdate();
-        
-        // Check if raycast hit something
-        if (lineOfSightRay.IsColliding())
+        // If we have a RayCast2D, use it for line-of-sight checking
+        if (lineOfSightRay != null)
         {
-            // Check if what we hit is the player
-            var collider = lineOfSightRay.GetCollider();
-            return collider == Player || (collider as Node)?.IsInGroup("player") == true;
+            // Point the raycast towards the player
+            Vector2 directionToPlayer = GetDirectionToPlayer();
+            lineOfSightRay.TargetPosition = directionToPlayer * distanceToPlayer;
+            
+            // Force the raycast to update
+            lineOfSightRay.ForceRaycastUpdate();
+            
+            // Check if raycast hit something
+            if (lineOfSightRay.IsColliding())
+            {
+                // Check if what we hit is the player
+                var collider = lineOfSightRay.GetCollider();
+                return collider == Player || (collider as Node)?.IsInGroup("player") == true;
+            }
+            
+            // If no collision, we can see the player (they're within sight range)
+            return true;
         }
-        
-        // If no collision, we can see the player (they're within sight range)
-        return true;
+        else
+        {
+            // Fallback: if no RayCast2D, just use distance-based detection
+            GD.Print($"Enemy1: Using distance-based detection. Distance to player: {distanceToPlayer}");
+            return true; // Player is within sight range, assume we can see them
+        }
     }
 
     public void TakeDamage(int damage)
@@ -197,5 +232,22 @@ public partial class Enemy1 : CharacterBody2D, ITakeDamage
         IsDead = true;
         stateMachine.TransitionTo("Dead");
         // Add any additional death logic here (e.g., playing a death animation, removing the enemy from the scene, etc.)
+    }
+
+    // Debug method to check enemy status
+    public void PrintEnemyStatus()
+    {
+        GD.Print($"=== Enemy1 Status ===");
+        GD.Print($"Position: {GlobalPosition}");
+        GD.Print($"Player: {(Player != null ? Player.GlobalPosition.ToString() : "null")}");
+        GD.Print($"Distance to Player: {(Player != null ? GetDistanceToPlayer().ToString("F1") : "N/A")}");
+        GD.Print($"Can See Player: {CanSeePlayer()}");
+        GD.Print($"Sight Range: {SightRange}");
+        GD.Print($"Attack Range: {AttackRange}");
+        GD.Print($"Current State: {(stateMachine?.CurrentState?.Name ?? "null")}");
+        GD.Print($"Is Dead: {IsDead}");
+        GD.Print($"Health: {currentHealth}/{maxHealth}");
+        GD.Print($"LineOfSight Ray: {(lineOfSightRay != null ? "exists" : "null")}");
+        GD.Print($"===================");
     }
 }

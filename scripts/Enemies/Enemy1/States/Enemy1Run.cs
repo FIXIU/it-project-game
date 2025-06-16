@@ -21,6 +21,9 @@ public partial class Enemy1Run : State
         
         // determine run direction toward player if we can see them, otherwise default to right
         direction = enemy.Player != null && enemy.CanSeePlayer() ? enemy.GetDirectionToPlayer() : Vector2.Right;
+        
+        // flip sprite to face initial movement direction
+        enemy.FlipSprite(direction);
     }
 
     public override void Update(double delta)
@@ -32,6 +35,9 @@ public partial class Enemy1Run : State
         {
             direction = enemy.GetDirectionToPlayer();
         }
+        
+        // flip sprite to face movement direction
+        enemy.FlipSprite(direction);
         
         // move enemy
         enemy.Velocity = new Vector2(direction.X * enemy.Speed, enemy.Velocity.Y);
