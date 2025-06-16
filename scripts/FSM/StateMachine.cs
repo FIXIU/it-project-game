@@ -65,12 +65,23 @@ public partial class StateMachine : Node
     }
     public void TransitionTo(string stateName)
     {
-        if (!_states.ContainsKey(stateName) || _currentState == _states[stateName])
+        
+        if (!_states.ContainsKey(stateName))
+        {
+            GD.PrintErr($"StateMachine: State '{stateName}' not found!");
             return;
+        }
+        
+        if (_currentState == _states[stateName])
+        {
+            return;
+        }
+        
         if (_currentState != null)
         {
             _currentState.Exit();
         }
+        
         _currentState = _states[stateName];
         _currentState.Enter();
     }

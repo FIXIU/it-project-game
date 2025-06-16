@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://b1f728ydutwaw"]
+[gd_scene load_steps=13 format=3 uid="uid://b1f728ydutwaw"]
 
 [ext_resource type="Script" uid="uid://dqa6tqqm26vrd" path="res://scripts/Gui.cs" id="1_jbthi"]
 [ext_resource type="Texture2D" uid="uid://c5r63sp4vdgie" path="res://assets/GUI/noHealth.png" id="2_shsct"]
 [ext_resource type="FontFile" uid="uid://06imve7oq3s5" path="res://assets/RobotoCondensed-VariableFont_wght.ttf" id="2_tqy5q"]
 [ext_resource type="Texture2D" uid="uid://c2vt4lhdtbwdq" path="res://assets/GUI/EmptyHealthBar.png" id="3_tqy5q"]
 [ext_resource type="Texture2D" uid="uid://rvxuybdwgxdk" path="res://assets/GUI/FullHealth.png" id="4_hywd1"]
+[ext_resource type="Texture2D" uid="uid://m7mnsmotkdv4" path="res://assets/enemy/Boss1/underBossHealthBar.png" id="6_u3xxf"]
+[ext_resource type="Texture2D" uid="uid://bbqpewukq3tg6" path="res://assets/enemy/Boss1/overBossHealthBar.png" id="7_cekc3"]
+[ext_resource type="Texture2D" uid="uid://cya7h1007xb2x" path="res://assets/enemy/Boss1/progressBossHealthBar.png" id="8_1i4pd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tqy5q"]
 font = ExtResource("2_tqy5q")
@@ -13,7 +16,151 @@ font_color = Color(0.67, 0.0134, 0.0134, 1)
 outline_size = 5
 outline_color = Color(0.33, 0.0132, 0.0132, 1)
 
-[node name="Gui" type="Control" node_paths=PackedStringArray("_healthBar")]
+[sub_resource type="Animation" id="Animation_y0luo"]
+resource_name = "FadeIn"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NinePatchRect/BossHealthBar:modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NinePatchRect/BossHealthBar:modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("NinePatchRect/BossHealthBar:modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("NinePatchRect/BossHealthBar:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("NinePatchRect:position:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(220, -0.25, 0, 0.25, 0, 220, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("NinePatchRect:position:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(270, -0.25, 0, 0.25, 0, 230, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+
+[sub_resource type="Animation" id="Animation_tyhcs"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NinePatchRect/BossHealthBar:modulate:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NinePatchRect/BossHealthBar:modulate:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("NinePatchRect/BossHealthBar:modulate:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("NinePatchRect/BossHealthBar:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("NinePatchRect:position:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(220, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("NinePatchRect:position:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(270, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dcyui"]
+_data = {
+&"FadeIn": SubResource("Animation_y0luo"),
+&"RESET": SubResource("Animation_tyhcs")
+}
+
+[node name="Gui" type="Control" node_paths=PackedStringArray("_bossBarAnimationPlayer", "_bossHealthBar", "_healthBar")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,6 +168,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jbthi")
+_bossBarAnimationPlayer = NodePath("NinePatchRect/BossBarAnimator")
+_bossHealthBar = NodePath("NinePatchRect/BossHealthBar")
 _healthBar = NodePath("NinePatchRect2/TextureProgressBar")
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
@@ -49,6 +198,62 @@ texture_over = ExtResource("3_tqy5q")
 texture_progress = ExtResource("4_hywd1")
 
 [node name="Label" type="Label" parent="NinePatchRect2/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "100 HP"
+label_settings = SubResource("LabelSettings_tqy5q")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BossBarAnimator" type="AnimationPlayer" parent="NinePatchRect"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_dcyui")
+}
+
+[node name="BossHealthBar" type="TextureProgressBar" parent="NinePatchRect"]
+modulate = Color(1, 1, 1, 0)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -16.0
+offset_right = 64.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_under = ExtResource("6_u3xxf")
+texture_over = ExtResource("7_cekc3")
+texture_progress = ExtResource("8_1i4pd")
+
+[node name="Label" type="Label" parent="NinePatchRect/BossHealthBar"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

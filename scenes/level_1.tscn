@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=4 uid="uid://c1wk2618nrq8r"]
+[gd_scene load_steps=29 format=4 uid="uid://c1wk2618nrq8r"]
 
 [ext_resource type="Texture2D" uid="uid://cpteftqjqnnbu" path="res://assets/TileMapStartingCave.png" id="1_014kd"]
 [ext_resource type="Texture2D" uid="uid://bwhn82g7jpre8" path="res://assets/cave/tile-set.png" id="2_2cbcq"]
@@ -16,7 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://cuv5jtglyi04d" path="res://assets/props/bush02.png" id="16_x2xxo"]
 [ext_resource type="Texture2D" uid="uid://ckbgpk2t7sns1" path="res://assets/props/bush01.png" id="17_2cbcq"]
 [ext_resource type="Texture2D" uid="uid://cow7bsr62njsh" path="res://assets/props/bush03.png" id="18_isj1j"]
-[ext_resource type="Texture2D" uid="uid://bvnnvuf8mbjqg" path="res://assets/cave/deathSpikes.png" id="20_isj1j"]
 [ext_resource type="PackedScene" uid="uid://b1f728ydutwaw" path="res://scenes/GUI.tscn" id="20_tr1x6"]
 [ext_resource type="PackedScene" uid="uid://cdw05kg8pjrao" path="res://scenes/DeathZone.tscn" id="21_so66j"]
 [ext_resource type="Texture2D" uid="uid://dt3dxt6vuph0u" path="res://assets/cave/octopusum-waving.png" id="21_tr1x6"]
@@ -404,9 +403,11 @@ texture = ExtResource("1_014kd")
 16:1/0 = 0
 16:2/0 = 0
 16:3/0 = 0
+16:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -6, -8, -6, 8, -8, 8)
 15:3/0 = 0
 14:3/0 = 0
 13:3/0 = 0
+13:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(5, -8, 8, -8, 8, 8, 5, 8)
 13:2/0 = 0
 13:1/0 = 0
 14:1/0 = 0
@@ -475,7 +476,7 @@ texture = ExtResource("1_014kd")
 14:12/0 = 0
 14:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -3, -8, -4, -8, 8, 8, 8)
 15:12/0 = 0
-15:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -7, -8, -3, -8, 8, 8, 8)
+15:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -3, 8, -8, 8, 8, -8, 8)
 15:13/0 = 0
 15:13/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 14:13/0 = 0
@@ -491,7 +492,7 @@ texture = ExtResource("1_014kd")
 30:13/0 = 0
 30:13/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 16:12/0 = 0
-16:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -7, -7, -8, 8, -8, 8, 8, -8, 8)
+16:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 17:12/0 = 0
 17:13/0 = 0
 16:13/0 = 0
@@ -1012,7 +1013,7 @@ scale = Vector2(2, 2)
 Position = Vector2(4402, -150)
 
 [node name="Player" parent="." node_paths=PackedStringArray("_deathScreen", "gui") instance=ExtResource("23_d5akn")]
-position = Vector2(-33.0002, 1.00002)
+position = Vector2(-71, 3)
 _deathScreen = NodePath("../CanvasLayer/DeathScreen")
 gui = NodePath("../CanvasLayer/Gui")
 wallJumpBoostTime = 0.5
@@ -1331,242 +1332,3 @@ z_index = -1
 position = Vector2(3392, -110)
 
 [node name="CaveAssets" type="Node" parent="."]
-
-[node name="octopus" type="Node" parent="CaveAssets"]
-
-[node name="octopus1" type="Sprite2D" parent="CaveAssets/octopus"]
-texture_filter = 1
-position = Vector2(1311, 541)
-texture = ExtResource("21_tr1x6")
-hframes = 6
-
-[node name="deathZones" type="Node" parent="CaveAssets"]
-
-[node name="DeathZone1" type="Node" parent="CaveAssets/deathZones"]
-
-[node name="thornsCave" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1121, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave2" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1132, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave3" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1142, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave4" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1152, 654)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave5" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1160, 656)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave6" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1174, 652)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave7" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1195, 658)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave8" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1186, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave9" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1205, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave10" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1199, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave11" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1213, 651)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave12" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1224, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave13" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1237, 662)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave14" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1246, 659)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave15" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1246, 659)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave16" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1265, 654)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave17" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1278, 656)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave18" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1288, 658)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave19" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1299, 660)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave20" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1305, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave21" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1293, 655)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave22" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1316, 658)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave23" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1310, 654)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave24" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1334, 660)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave25" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1323, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave26" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1343, 654)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave27" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1356, 656)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave28" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1361, 650)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave29" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1377, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave30" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1367, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave31" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1387, 656)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave32" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1379, 652)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave33" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1396, 655)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave34" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1405, 652)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave35" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1420, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave36" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1429, 653)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave37" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1438, 654)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave38" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1251, 656)
-texture = ExtResource("20_isj1j")
-
-[node name="thornsCave39" type="Sprite2D" parent="CaveAssets/deathZones/DeathZone1"]
-texture_filter = 1
-position = Vector2(1232, 657)
-texture = ExtResource("20_isj1j")
-
-[node name="deathzone" parent="CaveAssets/deathZones/DeathZone1" instance=ExtResource("21_so66j")]
-position = Vector2(1276, 667)
-scale = Vector2(17.64, 1)
-
-[node name="flower" type="Node" parent="CaveAssets"]
-
-[node name="Sprite2D" type="Sprite2D" parent="CaveAssets/flower"]
-texture_filter = 1
-position = Vector2(1765, 576)
-texture = ExtResource("22_wbtxt")
-hframes = 62
-
-[node name="Blobs" type="Node" parent="CaveAssets"]
-
-[node name="blob" type="Sprite2D" parent="CaveAssets/Blobs"]
-texture_filter = 1
-position = Vector2(926, 437)
-rotation = 1.53988
-texture = ExtResource("23_x2fux")
-
-[node name="blob2" type="Sprite2D" parent="CaveAssets/Blobs"]
-texture_filter = 1
-position = Vector2(1485, 593)
-rotation = -0.00118037
-texture = ExtResource("23_x2fux")
-
-[node name="blob3" type="Sprite2D" parent="CaveAssets/Blobs"]
-texture_filter = 1
-position = Vector2(1912, 590)
-rotation = -0.00118037
-texture = ExtResource("23_x2fux")

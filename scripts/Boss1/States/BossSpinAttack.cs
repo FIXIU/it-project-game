@@ -27,7 +27,7 @@ public partial class BossSpinAttack : State
     public override void Update(double delta)
     {
         if (boss.IsDead) return;
-        spinTimer += (float)delta;
+            spinTimer += (float)delta;
         if (spinTimer >= 1.0f)
         {
             boss.Velocity = new Vector2(walkDirection.X * 50, boss.Velocity.Y);

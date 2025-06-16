@@ -10,17 +10,56 @@ namespace Enemies.Enemy1.States
 
         public override void Enter()
         {
+            GD.Print("Enemy1Idle: Entering Idle state");
             enemy = GetNode<Enemy1>("../..");
-            var anim = GetNode<AnimationPlayer>("../EnemyAnimator/AnimationPlayer");
-            anim.Play("Idle");
-            // Stop horizontal movement
-            enemy.Velocity = new Vector2(0, enemy.Velocity.Y);
+
+            if (enemy == null)
+            {
+                GD.PrintErr("Enemy1Idle: Enemy1 node not found at path '../..'");
+                return;
+            }
+
+            GD.Print($"Enemy1Idle: Enemy found. FSM reference: {(fsm != null ? "exists" : "null")}");
+            
+            // Play idle animation safely
+            enemy.PlayAnimationSafely("Idle");
+
+            // Stop horizontal movement (only if enemy is initialized)
+            if (enemy != null)
+            {
+                enemy.Velocity = new Vector2(0, enemy.Velocity.Y);
+            }
         }
 
-        public override void Update(double delta)
+        public override void Update(float delta)
         {
             if (enemy.IsDead) return;
-            // Idle state update logic
+            
+            // Debug information
+            if (enemy.Player != null)
+            {
+                float distanceToPlayer = enemy.GetDistanceToPlayer();
+                bool canSeePlayer = enemy.CanSeePlayer();
+                
+                // Check if player is visible
+                if (canSeePlayer)
+                {
+                    // If player is in attack range, attack
+                    if (distanceToPlayer <= enemy.AttackRange && enemy.AttackCooldownTimer.TimeLeft <= 0)
+                    {
+                        fsm?.TransitionTo("Attack");
+                    }
+                    // If player is visible but out of attack range, run towards them
+                    else if (enemy.standRay.IsColliding())
+                    {
+                        fsm?.TransitionTo("Run");
+                    }
+                    else
+                    {
+                        enemy.FlipSprite(enemy.GetDirectionToPlayer());
+                    }
+                }
+            }
         }
     }
 }
