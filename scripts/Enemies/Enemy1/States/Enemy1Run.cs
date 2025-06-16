@@ -9,8 +9,16 @@ public partial class Enemy1Run : State
     public override void Enter()
     {
         enemy = GetNode<Enemy1>("../..");
-        var anim = GetNode<AnimationPlayer>("../EnemyAnimator/AnimationPlayer");
-        anim.Play("Run");
+        
+        if (enemy == null)
+        {
+            GD.PrintErr("Enemy1Run: Enemy1 node not found at path '../..'");
+            return;
+        }
+
+        // Play run animation safely
+        enemy.PlayAnimationSafely("Run");
+        
         // determine run direction toward player if we can see them, otherwise default to right
         direction = enemy.Player != null && enemy.CanSeePlayer() ? enemy.GetDirectionToPlayer() : Vector2.Right;
     }
@@ -37,7 +45,10 @@ public partial class Enemy1Run : State
 
     public override void Exit()
     {
-        // stop movement when exiting run
-        enemy.Velocity = new Vector2(0, enemy.Velocity.Y);
+        // stop movement when exiting run (only if enemy is initialized)
+        if (enemy != null)
+        {
+            enemy.Velocity = new Vector2(0, enemy.Velocity.Y);
+        }
     }
 }

@@ -11,16 +11,43 @@ namespace Enemies.Enemy1.States
         public override void Enter()
         {
             enemy = GetNode<Enemy1>("../..");
-            var anim = GetNode<AnimationPlayer>("../EnemyAnimator/AnimationPlayer");
-            anim.Play("Idle");
-            // Stop horizontal movement
-            enemy.Velocity = new Vector2(0, enemy.Velocity.Y);
+
+            if (enemy == null)
+            {
+                GD.PrintErr("Enemy1Idle: Enemy1 node not found at path '../..'");
+                return;
+            }
+
+            // Play idle animation safely
+            enemy.PlayAnimationSafely("Idle");
+
+            // Stop horizontal movement (only if enemy is initialized)
+            if (enemy != null)
+            {
+                enemy.Velocity = new Vector2(0, enemy.Velocity.Y);
+            }
         }
 
         public override void Update(double delta)
         {
             if (enemy.IsDead) return;
-            // Idle state update logic
+            
+            // Check if player is visible
+            if (enemy.Player != null && enemy.CanSeePlayer())
+            {
+                float distanceToPlayer = enemy.GetDistanceToPlayer();
+                
+                // If player is in attack range, attack
+                if (distanceToPlayer <= enemy.AttackRange)
+                {
+                    fsm?.TransitionTo("Attack");
+                }
+                // If player is visible but out of attack range, run towards them
+                else
+                {
+                    fsm?.TransitionTo("Run");
+                }
+            }
         }
     }
 }

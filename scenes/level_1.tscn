@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://c1wk2618nrq8r"]
+[gd_scene load_steps=30 format=4 uid="uid://c1wk2618nrq8r"]
 
 [ext_resource type="Texture2D" uid="uid://cpteftqjqnnbu" path="res://assets/TileMapStartingCave.png" id="1_014kd"]
 [ext_resource type="Texture2D" uid="uid://bwhn82g7jpre8" path="res://assets/cave/tile-set.png" id="2_2cbcq"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cuv5jtglyi04d" path="res://assets/props/bush02.png" id="16_x2xxo"]
 [ext_resource type="Texture2D" uid="uid://ckbgpk2t7sns1" path="res://assets/props/bush01.png" id="17_2cbcq"]
 [ext_resource type="Texture2D" uid="uid://cow7bsr62njsh" path="res://assets/props/bush03.png" id="18_isj1j"]
+[ext_resource type="PackedScene" uid="uid://c45rttbsplpn2" path="res://scenes/Entities/Hostile/Samurai/Samurai.tscn" id="20_isj1j"]
 [ext_resource type="PackedScene" uid="uid://b1f728ydutwaw" path="res://scenes/GUI.tscn" id="20_tr1x6"]
 [ext_resource type="PackedScene" uid="uid://cdw05kg8pjrao" path="res://scenes/DeathZone.tscn" id="21_so66j"]
 [ext_resource type="PackedScene" uid="uid://y62dyumysbu2" path="res://player/Player.tscn" id="23_d5akn"]
@@ -1327,3 +1328,6 @@ z_index = -1
 position = Vector2(3392, -110)
 
 [node name="CaveAssets" type="Node" parent="."]
+
+[node name="Enemy Samurai" parent="." instance=ExtResource("20_isj1j")]
+position = Vector2(214, -5)
