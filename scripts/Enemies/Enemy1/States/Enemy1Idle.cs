@@ -40,7 +40,6 @@ namespace Enemies.Enemy1.States
             {
                 float distanceToPlayer = enemy.GetDistanceToPlayer();
                 bool canSeePlayer = enemy.CanSeePlayer();
-                GD.Print($"Enemy1Idle: Player found. Distance: {distanceToPlayer:F1}, CanSee: {canSeePlayer}, AttackRange: {enemy.AttackRange}, SightRange: {enemy.SightRange}");
                 
                 // Check if player is visible
                 if (canSeePlayer)
@@ -48,29 +47,18 @@ namespace Enemies.Enemy1.States
                     // If player is in attack range, attack
                     if (distanceToPlayer <= enemy.AttackRange && enemy.AttackCooldownTimer.TimeLeft <= 0)
                     {
-                        GD.Print("Enemy1Idle: Transitioning to Attack");
                         fsm?.TransitionTo("Attack");
                     }
                     // If player is visible but out of attack range, run towards them
                     else if (enemy.standRay.IsColliding())
                     {
-                        GD.Print("Enemy1Idle: Transitioning to Run");
                         fsm?.TransitionTo("Run");
                     }
                     else
                     {
-                        GD.Print("Enemy1Idle: Player is out of attack range, but can see them. Flipping sprite.");
                         enemy.FlipSprite(enemy.GetDirectionToPlayer());
                     }
                 }
-                else
-                {
-                    GD.Print("Enemy1Idle: Cannot see player");
-                }
-            }
-            else
-            {
-                GD.Print("Enemy1Idle: No player found");
             }
         }
     }

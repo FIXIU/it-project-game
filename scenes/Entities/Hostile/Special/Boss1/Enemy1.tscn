@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bvjno4a3p0no5"]
+[gd_scene load_steps=41 format=3 uid="uid://bvjno4a3p0no5"]
 
 [ext_resource type="Script" uid="uid://cd4hhi537k81f" path="res://scenes/Entities/Hostile/Special/Boss1/Boss.cs" id="1_lsiai"]
 [ext_resource type="Texture2D" uid="uid://vfe06ky0gmwr" path="res://assets/enemy/spr_Idle_strip.png" id="1_lym4s"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://cjcj2mvic1kjy" path="res://scripts/Boss1/States/BossSpinAttack.cs" id="17_wqjj2"]
 [ext_resource type="Script" uid="uid://dvvdgllxhfhwy" path="res://scripts/Boss1/States/BossTaunt.cs" id="18_gwv3i"]
 [ext_resource type="Script" uid="uid://de7cibf8gdtyo" path="res://scripts/Boss1/States/BossLeap.cs" id="19_yggyu"]
+[ext_resource type="PackedScene" uid="uid://bwb2nqvm2hjf7" path="res://scenes/boss_area.tscn" id="23_20i07"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44cqv"]
 size = Vector2(21, 32)
@@ -2329,6 +2330,8 @@ wait_time = 10.0
 
 [node name="DashTimer" type="Timer" parent="."]
 wait_time = 4.0
+
+[node name="BossArea" parent="." instance=ExtResource("23_20i07")]
 
 [connection signal="body_entered" from="DetectionArea" to="." method="OnDetectionAreaBodyEntered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="OnDetectionAreaBodyExited"]

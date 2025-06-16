@@ -8,7 +8,7 @@ public partial class Boss : CharacterBody2D, ITakeDamage
     [Export] public float AttackRange = 50.0f;
     [Export] public float AggroRange = 200.0f;
     [Export] public int Health = 500;
-    [Export] public float MaxHealth = 100.0f;
+    [Export] public int MaxHealth = 100;
     [Export] public float DashSpeed = 300.0f;
     [Export] public float LeapSpeed = 400.0f;
 
@@ -287,7 +287,7 @@ public partial class Boss : CharacterBody2D, ITakeDamage
 
     public void TakeDamage(int damage)
     {
-
+        Player.Call("BossTookDamage", damage);
         Health -= damage;
         GD.Print($"BOSS DAMAGED: {Health}");
         if (Health <= 0)

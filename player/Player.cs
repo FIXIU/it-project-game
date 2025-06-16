@@ -1,3 +1,4 @@
+using Enemies.Enemy1;
 using Godot;
 using System;
 
@@ -21,7 +22,7 @@ public partial class Player : PlayerMovement, ITakeDamage
         }
         if (health >= 100)
         {
-            health = 100;
+            health = 90;
         }
     }
 
@@ -37,5 +38,24 @@ public partial class Player : PlayerMovement, ITakeDamage
         GD.Print("Updating health bar...");
         gui.Health = health;
         GD.Print($"Health updated to {gui.Health}.");
+    }
+
+    public void ShowBossHealthBar(Boss boss)
+    {
+        GD.Print("Showing boss health bar...");
+        gui.IsBossActive = true;
+        gui.BossHealth = boss.Health;
+    }
+
+    public void HideBossHealthBar()
+    {
+        GD.Print("Hiding boss health bar...");
+        gui.BossHealth = 0;
+        gui.IsBossActive = false;
+    }
+
+    public void BossTookDamage(int damage)
+    {
+        gui.BossHealth -= damage;
     }
 }
