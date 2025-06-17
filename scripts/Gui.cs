@@ -73,4 +73,17 @@ public partial class Gui : Control
             wasBossActive = false;
         }
     }
+
+    public void TransitionScreenFade(bool shouldScreenBeDark)
+    {
+        var screenFadeAnimator = GetNode<AnimationPlayer>("ScreenFade/ScreenFadeAnimationPlayer");
+        if (shouldScreenBeDark)
+        {
+            screenFadeAnimator.PlayBackwards("Fade");
+        }
+        else
+        {
+            screenFadeAnimator.Play("Fade");
+        }
+    }
 }

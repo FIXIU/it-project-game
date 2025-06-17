@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmgskor55t140"]
+
+[ext_resource type="Script" uid="uid://cnlwk5iqbtf57" path="res://scripts/ScreenFadeZone.cs" id="1_j61v4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lo1kj"]
+
+[node name="Screen Fade Zone" type="Area2D"]
+collision_layer = 0
+collision_mask = 32
+script = ExtResource("1_j61v4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_lo1kj")
+
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]
+[connection signal="body_exited" from="." to="." method="OnBodyExited"]

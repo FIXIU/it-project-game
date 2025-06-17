@@ -58,4 +58,9 @@ public partial class Player : PlayerMovement, ITakeDamage
     {
         gui.BossHealth -= damage;
     }
+
+    public void TransitionScreenFade(bool shouldScreenBeDark)
+    {
+        gui.TransitionScreenFade(shouldScreenBeDark);
+    }
 }

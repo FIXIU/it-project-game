@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c45rttbsplpn2"]
+[gd_scene load_steps=23 format=3 uid="uid://c45rttbsplpn2"]
 
 [ext_resource type="Script" uid="uid://blqe2lkr8clpt" path="res://scripts/Enemies/Enemy1/Enemy1.cs" id="1_48p7f"]
 [ext_resource type="Texture2D" uid="uid://qt3mkrgd1uwf" path="res://assets/enemy/enemy_1/samurai-idle.png" id="1_eu3gw"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://d3dlmfub1xyb5" path="res://scripts/Enemies/Enemy1/States/Enemy1Run.cs" id="9_to4aq"]
 [ext_resource type="Script" uid="uid://bq06u3biu7ems" path="res://scripts/Enemies/Enemy1/States/Enemy1Attack.cs" id="11_dgtff"]
 [ext_resource type="Script" uid="uid://d211tylispida" path="res://scripts/Enemies/Enemy1/States/Enemy1Hurt.cs" id="12_0qc8y"]
+[ext_resource type="Script" uid="uid://dyr5eica2vt58" path="res://scripts/Enemies/Enemy1/States/Enemy1Dead.cs" id="13_0qc8y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pm3yi"]
 size = Vector2(13, 30)
@@ -429,6 +430,9 @@ script = ExtResource("11_dgtff")
 
 [node name="Hurt" type="Node" parent="FSM"]
 script = ExtResource("12_0qc8y")
+
+[node name="Dead" type="Node" parent="FSM"]
+script = ExtResource("13_0qc8y")
 
 [node name="LineOfSight" type="RayCast2D" parent="."]
 

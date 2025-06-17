@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://crjqck2mv2nbi"]
+[gd_scene load_steps=3 format=3 uid="uid://crjqck2mv2nbi"]
 
 [ext_resource type="Script" uid="uid://daybyqt1bpdaw" path="res://scripts/MainMenu.cs" id="1_yqorp"]
+[ext_resource type="LabelSettings" uid="uid://b1a1mbvdn762u" path="res://assets/tutorial_text.tres" id="2_0ykhv"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -23,6 +24,31 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(115.755, 46.145)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.5
+offset_top = -11.5
+offset_right = 54.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Specter Demo"
+label_settings = ExtResource("2_0ykhv")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="LoadGameButton" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
