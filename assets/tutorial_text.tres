@@ -4,5 +4,5 @@
 
 [resource]
 font = ExtResource("1_nlqkp")
-font_size = 14
+font_size = 32
 shadow_size = 0
